@@ -10,6 +10,7 @@ import appConfigSchema from './common/schemas/app-config.schema';
   imports: [
     ConfigModule.forRoot({
       ignoreEnvFile: true,
+      cache: true,
       load: [appConfig],
       validationSchema: appConfigSchema,
     }),
