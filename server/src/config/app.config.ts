@@ -11,4 +11,7 @@ export default () => ({
     host: process.env.REDIS_HOST,
     port: parseInt(process.env.REDIS_PORT) || 6379,
   },
+  api: {
+    sms: process.env.API_KEY_SMS,
+  },
 });
