@@ -9,6 +9,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import appConfigSchema from './common/schemas/app-config.schema';
 import appConfig from './config/app.config';
+import { IamModule } from './iam/iam.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -53,6 +54,7 @@ import { UsersModule } from './users/users.module';
       }),
     }),
     UsersModule,
+    IamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
