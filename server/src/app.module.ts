@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import appConfig from './config/app.config';
 import appConfigSchema from './common/schemas/app-config.schema';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import appConfigSchema from './common/schemas/app-config.schema';
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV === 'development',
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
