@@ -11,7 +11,9 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { Request } from 'express';
 import { AuthenticationService } from './authentication.service';
 import { SendOtpDto } from './dto/send-otp.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
 export class AuthenticationController {
