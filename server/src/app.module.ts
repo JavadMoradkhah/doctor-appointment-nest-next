@@ -44,7 +44,7 @@ import { UsersModule } from './users/users.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        throttlers: [{ ttl: minutes(5), limit: 1 }],
+        throttlers: [{ ttl: minutes(1), limit: 1 }],
         storage: new ThrottlerStorageRedisService(
           new Redis({
             host: configService.get('redis.host'),
