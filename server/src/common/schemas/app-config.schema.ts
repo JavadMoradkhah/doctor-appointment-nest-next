@@ -11,5 +11,6 @@ export default Joi.object({
   DATABASE_NAME: Joi.string().required(),
   REDIS_HOST: Joi.string().required(),
   REDIS_PORT: Joi.number().default(6379),
+  REDIS_URL: Joi.string().required(),
   API_KEY_SMS: Joi.string().required(),
 });
