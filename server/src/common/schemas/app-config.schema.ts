@@ -13,4 +13,5 @@ export default Joi.object({
   REDIS_PORT: Joi.number().default(6379),
   REDIS_URL: Joi.string().required(),
   API_KEY_SMS: Joi.string().required(),
+  COOKIE_SECRET: Joi.string().required(),
 });
