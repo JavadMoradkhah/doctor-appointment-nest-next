@@ -1,3 +1,4 @@
+import { RedisModule } from '@nestjs-modules/ioredis';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -29,6 +30,14 @@ import { UsersModule } from './users/users.module';
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV === 'development',
+    }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'single',
+        url: configService.get('redis.url'),
+      }),
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
