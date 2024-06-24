@@ -15,7 +15,7 @@ import { SmsQueueConsumer } from './iam.process';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Otp]),
+    TypeOrmModule.forFeature([User]),
     BullModule.registerQueue({ name: QUEUE_OTP_SMS }),
     JwtModule.registerAsync(accessTokenConfig.asProvider()),
     JwtModule.registerAsync(refreshTokenConfig.asProvider()),
