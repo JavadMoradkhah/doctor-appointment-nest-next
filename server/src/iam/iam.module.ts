@@ -12,8 +12,10 @@ import refreshTokenConfig from './config/refresh-token.config';
 import { BcryptService } from './hashing/bcrypt.service';
 import { HashingService } from './hashing/hashing.service';
 import { SmsQueueConsumer } from './iam.process';
+import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { OtpStorage } from './authentication/storages/otp.storage';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -28,6 +30,10 @@ import { OtpStorage } from './authentication/storages/otp.storage';
     {
       provide: HashingService,
       useClass: BcryptService,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticationGuard,
     },
     AccessTokenGuard,
     OtpStorage,
