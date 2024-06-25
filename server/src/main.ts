@@ -20,6 +20,7 @@ async function bootstrap() {
     .setTitle('Doctor Appointment')
     .setDescription('Online doctor appointment booking system')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
