@@ -3,8 +3,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
+import { Profile } from './profile.entity';
 
 @Entity('users')
 export class User {
@@ -22,4 +25,8 @@ export class User {
 
   @CreateDateColumn()
   joinedAt: Date;
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile;
 }
