@@ -18,10 +18,13 @@ import { COOKIE_REFRESH_TOKEN } from './authentication.constants';
 import { AuthenticationService } from './authentication.service';
 import { SendOtpDto } from './dto/send-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { Auth } from './decorators/auth.decorator';
+import { AuthType } from './enums/auth-type.enum';
 
 @ApiTags('auth')
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
+@Auth(AuthType.None)
 export class AuthenticationController {
   constructor(
     private readonly authService: AuthenticationService,
