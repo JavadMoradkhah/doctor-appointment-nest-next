@@ -4,6 +4,9 @@ export const REGEX_PASSWORD =
 
 export const REGEX_PHONE = /^09[0-9]{9}$/;
 
+// Constants
+export const COOKIE_REFRESH_TOKEN = 'refreshToken';
+
 // Error Messages
 export const ERR_MSG_PASSWORD =
   'کلمه عبور باید حداقل شامل یک حرف بزرگ، یک حرف کوچک و یک عدد باشد';
