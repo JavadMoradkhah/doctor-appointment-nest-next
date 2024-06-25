@@ -12,6 +12,7 @@ import refreshTokenConfig from './config/refresh-token.config';
 import { BcryptService } from './hashing/bcrypt.service';
 import { HashingService } from './hashing/hashing.service';
 import { SmsQueueConsumer } from './iam.process';
+import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { OtpStorage } from './authentication/storages/otp.storage';
 
 @Module({
@@ -28,6 +29,7 @@ import { OtpStorage } from './authentication/storages/otp.storage';
       provide: HashingService,
       useClass: BcryptService,
     },
+    AccessTokenGuard,
     OtpStorage,
     AuthenticationService,
     SmsQueueConsumer,

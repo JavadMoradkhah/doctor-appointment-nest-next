@@ -1,0 +1,64 @@
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
+import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
+import accessTokenConfig from 'src/iam/config/access-token.config';
+import { REQUEST_USER_KEY } from 'src/iam/iam.constants';
+import {
+  ERR_MSG_INVALID_TOKEN,
+  ERR_MSG_LOGIN_REQUIRED,
+  ERR_MSG_TOKEN_EXPIRED,
+} from '../authentication.constants';
+
+@Injectable()
+export class AccessTokenGuard implements CanActivate {
+  constructor(
+    private readonly jwtService: JwtService,
+    @Inject(accessTokenConfig.KEY)
+    private readonly accessTokenConfiguration: ConfigType<
+      typeof accessTokenConfig
+    >,
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const accessToken = this.extractTokenFromHeader(request);
+
+    if (!accessToken) {
+      throw new UnauthorizedException(ERR_MSG_LOGIN_REQUIRED);
+    }
+
+    try {
+      const payload = await this.jwtService.verifyAsync(
+        accessToken,
+        this.accessTokenConfiguration,
+      );
+
+      request[REQUEST_USER_KEY] = payload;
+    } catch (error) {
+      if (
+        error instanceof JsonWebTokenError &&
+        error.name === 'TokenExpiredError'
+      ) {
+        throw new UnauthorizedException(ERR_MSG_TOKEN_EXPIRED);
+      }
+
+      throw new UnauthorizedException(ERR_MSG_INVALID_TOKEN);
+    }
+
+    return true;
+  }
+
+  private extractTokenFromHeader(request: Request): string | null {
+    const [_, token] =
+      request.headers['authorization']?.match(/Bearer (.*)/) ?? [];
+
+    return token;
+  }
+}
