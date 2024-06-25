@@ -14,6 +14,7 @@ import { HashingService } from './hashing/hashing.service';
 import { SmsQueueConsumer } from './iam.process';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
+import { RefreshTokenIdsStorage } from './authentication/storages/refresh-token-ids.storage';
 import { OtpStorage } from './authentication/storages/otp.storage';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -37,6 +38,7 @@ import { APP_GUARD } from '@nestjs/core';
     },
     AccessTokenGuard,
     OtpStorage,
+    RefreshTokenIdsStorage,
     AuthenticationService,
     SmsQueueConsumer,
   ],
