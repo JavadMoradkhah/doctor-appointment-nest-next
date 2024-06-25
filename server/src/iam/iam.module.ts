@@ -12,6 +12,7 @@ import refreshTokenConfig from './config/refresh-token.config';
 import { BcryptService } from './hashing/bcrypt.service';
 import { HashingService } from './hashing/hashing.service';
 import { SmsQueueConsumer } from './iam.process';
+import { OtpStorage } from './authentication/storages/otp.storage';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SmsQueueConsumer } from './iam.process';
       provide: HashingService,
       useClass: BcryptService,
     },
+    OtpStorage,
     AuthenticationService,
     SmsQueueConsumer,
   ],
