@@ -42,10 +42,10 @@ import { RolesGuard } from './authorization/guards/roles.guard';
       useClass: RolesGuard,
     },
     AccessTokenGuard,
+    SmsQueueConsumer,
     OtpStorage,
     RefreshTokenIdsStorage,
     AuthenticationService,
-    SmsQueueConsumer,
   ],
   controllers: [AuthenticationController],
 })
