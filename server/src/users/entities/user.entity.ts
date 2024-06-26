@@ -1,10 +1,9 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
+  Entity,
   OneToOne,
-  JoinColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
 import { Profile } from './profile.entity';
@@ -26,7 +25,6 @@ export class User {
   @CreateDateColumn()
   joinedAt: Date;
 
-  @OneToOne(() => Profile)
-  @JoinColumn()
+  @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
 }

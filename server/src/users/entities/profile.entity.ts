@@ -1,10 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserGender } from '../enums/user-gender.enum';
+import { User } from './user.entity';
 
 @Entity('profiles')
 export class Profile {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @JoinColumn()
+  @OneToOne(() => User, (user) => user.profile, { cascade: false })
+  user: User;
 
   @Column({ type: 'varchar', length: 50 })
   firstName: string;
