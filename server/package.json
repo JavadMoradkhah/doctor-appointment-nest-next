@@ -17,7 +17,12 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:create": "npx typeorm-ts-node-commonjs migration:create -d src/orm.datasource.ts",
+    "db:generate": "npx typeorm-ts-node-commonjs migration:generate -d src/orm.datasource.ts",
+    "db:migrate": "npx typeorm-ts-node-commonjs migration:run -d src/orm.datasource.ts",
+    "db:revert": "npx typeorm-ts-node-commonjs migration:revert -d src/orm.datasource.ts",
+    "db:drop": "npx typeorm-ts-node-commonjs schema:drop -d src/orm.datasource.ts"
   },
   "dependencies": {
     "@nestjs-modules/ioredis": "^2.0.2",
