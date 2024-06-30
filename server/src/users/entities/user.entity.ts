@@ -25,6 +25,8 @@ export class User {
   @CreateDateColumn()
   joinedAt: Date;
 
-  @OneToOne(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    cascade: ['update'],
+  })
   profile: Profile;
 }
