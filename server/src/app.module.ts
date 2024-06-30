@@ -29,7 +29,6 @@ import { UsersModule } from './users/users.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV === 'development',
     }),
     RedisModule.forRootAsync({
       imports: [ConfigModule],
