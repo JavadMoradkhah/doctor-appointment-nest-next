@@ -18,10 +18,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:create": "npx typeorm-ts-node-commonjs migration:create -d src/orm.datasource.ts",
-    "db:generate": "npx typeorm-ts-node-commonjs migration:generate -d src/orm.datasource.ts",
     "db:migrate": "npx typeorm-ts-node-commonjs migration:run -d src/orm.datasource.ts",
-    "db:revert": "npx typeorm-ts-node-commonjs migration:revert -d src/orm.datasource.ts",
+    "db:migrations": "npx typeorm-ts-node-commonjs migration:show -d src/orm.datasource.ts",
+    "db:createMigration": "npx typeorm-ts-node-commonjs migration:create -d src/orm.datasource.ts",
+    "db:generateMigration": "npx typeorm-ts-node-commonjs migration:generate -d src/orm.datasource.ts",
+    "db:revertMigration": "npx typeorm-ts-node-commonjs migration:revert -d src/orm.datasource.ts",
+    "db:sync:": "npx typeorm-ts-node-commonjs schema:sync -d src/orm.datasource.ts",
     "db:drop": "npx typeorm-ts-node-commonjs schema:drop -d src/orm.datasource.ts"
   },
   "dependencies": {
