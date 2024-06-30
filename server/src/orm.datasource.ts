@@ -8,7 +8,7 @@ const connectionOptions: DataSourceOptions = {
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   entities: ['src/**/*.entity{.ts,.js}'],
-  migrations: ['src/db/migrations/*{.ts,.js}'],
+  migrations: ['src/migrations/*{.ts,.js}'],
 };
 
 export default new DataSource(connectionOptions);
