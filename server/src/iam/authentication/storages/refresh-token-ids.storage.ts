@@ -9,20 +9,20 @@ export class RefreshTokenIdsStorage {
     private readonly redis: Redis,
   ) {}
 
-  private getKey(userId: string): string {
+  private getKey(userId: number): string {
     return `user:${userId}:token`;
   }
 
-  async insert(userId: string, tokenId: string): Promise<void> {
+  async insert(userId: number, tokenId: string): Promise<void> {
     await this.redis.set(this.getKey(userId), tokenId);
   }
 
-  async validate(userId: string, tokenId: string): Promise<boolean> {
+  async validate(userId: number, tokenId: string): Promise<boolean> {
     const storedTokenId = await this.redis.get(this.getKey(userId));
     return storedTokenId === tokenId;
   }
 
-  async invalidate(userId: string): Promise<void> {
+  async invalidate(userId: number): Promise<void> {
     await this.redis.del(this.getKey(userId));
   }
 }

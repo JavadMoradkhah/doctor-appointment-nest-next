@@ -157,7 +157,7 @@ export class AuthenticationService {
   }
 
   private signToken<T>(
-    userId: string,
+    userId: number,
     signOptions: {
       expiresIn: number;
       secret: string;

@@ -10,8 +10,8 @@ import { User } from './user.entity';
 
 @Entity('profiles')
 export class Profile {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @JoinColumn()
   @OneToOne(() => User, (user) => user.profile, { cascade: false })

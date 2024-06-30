@@ -10,8 +10,8 @@ import { Profile } from './profile.entity';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column({ type: 'varchar', length: 11, unique: true })
   phone: string;
