@@ -10,6 +10,7 @@ import { ThrottlerModule, minutes } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Redis } from 'ioredis';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
+import databaseConfig from 'src/config/database.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -21,7 +22,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     ConfigModule.forRoot({
       envFilePath: ENV_FILE,
       cache: true,
-      load: [appConfig],
+      load: [appConfig, databaseConfig],
       validationSchema: appConfigSchema,
     }),
     TypeOrmModule.forRoot({
