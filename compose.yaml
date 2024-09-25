@@ -1,22 +1,4 @@
 services:
-  server:
-    build:
-      context: ./server
-    restart: on-failure
-    environment:
-      NODE_ENV: development
-    env_file: ./server/.env.dev
-    ports:
-      - 5000:5000
-    volumes:
-      - ./server:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      database:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
   database:
     image: postgres:16.3-alpine3.20
     restart: always
