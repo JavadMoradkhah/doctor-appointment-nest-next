@@ -14,12 +14,17 @@ import { ApiTags } from '@nestjs/swagger';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { Request, Response } from 'express';
 import refreshTokenConfig from '../config/refresh-token.config';
-import { COOKIE_REFRESH_TOKEN } from './authentication.constants';
+import {
+  COOKIE_ACCESS_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  MSG_YOU_HAVE_SUCCESSFULLY_LOGGED_IN,
+} from './authentication.constants';
 import { AuthenticationService } from './authentication.service';
 import { SendOtpDto } from './dto/send-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { Auth } from './decorators/auth.decorator';
 import { AuthType } from './enums/auth-type.enum';
+import accessTokenConfig from '../config/access-token.config';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -31,6 +36,10 @@ export class AuthenticationController {
     @Inject(refreshTokenConfig.KEY)
     private readonly refreshTokenConfiguration: ConfigType<
       typeof refreshTokenConfig
+    >,
+    @Inject(accessTokenConfig.KEY)
+    private readonly accessTokenConfiguration: ConfigType<
+      typeof accessTokenConfig
     >,
   ) {}
 
@@ -49,13 +58,19 @@ export class AuthenticationController {
     const { accessToken, refreshToken } =
       await this.authService.verifyOtp(verifyOtpDto);
 
+    res.cookie(COOKIE_ACCESS_TOKEN, accessToken, {
+      signed: true,
+      httpOnly: true,
+      expires: new Date(Date.now() + this.accessTokenConfiguration.ttl * 1000),
+    });
+
     res.cookie(COOKIE_REFRESH_TOKEN, refreshToken, {
       signed: true,
       httpOnly: true,
       expires: new Date(Date.now() + this.refreshTokenConfiguration.ttl * 1000),
     });
 
-    return { accessToken };
+    return { message: MSG_YOU_HAVE_SUCCESSFULLY_LOGGED_IN };
   }
 
   @Post('refresh')
@@ -67,12 +82,16 @@ export class AuthenticationController {
     const { accessToken, refreshToken } =
       await this.authService.refreshTokens(req);
 
+    res.cookie(COOKIE_ACCESS_TOKEN, accessToken, {
+      signed: true,
+      httpOnly: true,
+      expires: new Date(Date.now() + this.accessTokenConfiguration.ttl * 1000),
+    });
+
     res.cookie(COOKIE_REFRESH_TOKEN, refreshToken, {
       signed: true,
       httpOnly: true,
       expires: new Date(Date.now() + this.refreshTokenConfiguration.ttl * 1000),
     });
-
-    return { accessToken };
   }
 }

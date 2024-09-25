@@ -5,7 +5,11 @@ export const REGEX_PASSWORD =
 export const REGEX_PHONE = /^09[0-9]{9}$/;
 
 // Constants
+export const COOKIE_ACCESS_TOKEN = 'accessToken';
 export const COOKIE_REFRESH_TOKEN = 'refreshToken';
+
+export const MSG_YOU_HAVE_SUCCESSFULLY_LOGGED_IN =
+  'با موفقیت وارد حساب کاربری شدید';
 
 // Error Messages
 export const ERR_MSG_PASSWORD =

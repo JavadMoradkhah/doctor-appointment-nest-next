@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
 import accessTokenConfig from 'src/modules/iam/config/access-token.config';
 import { REQUEST_USER_KEY } from 'src/modules/iam/iam.constants';
 import {
+  COOKIE_ACCESS_TOKEN,
   ERR_MSG_INVALID_TOKEN,
   ERR_MSG_LOGIN_REQUIRED,
   ERR_MSG_TOKEN_EXPIRED,
@@ -28,7 +28,7 @@ export class AccessTokenGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const accessToken = this.extractTokenFromHeader(request);
+    const accessToken = request.signedCookies[COOKIE_ACCESS_TOKEN];
 
     if (!accessToken) {
       throw new UnauthorizedException(ERR_MSG_LOGIN_REQUIRED);
@@ -53,12 +53,5 @@ export class AccessTokenGuard implements CanActivate {
     }
 
     return true;
-  }
-
-  private extractTokenFromHeader(request: Request): string | null {
-    const [_, token] =
-      request.headers['authorization']?.match(/Bearer (.*)/) ?? [];
-
-    return token;
   }
 }
