@@ -1,7 +1,3 @@
-import appConfigSchema from 'src/common/schemas/app-config.schema';
-import appConfig from 'src/config/app.config';
-import { IamModule } from 'src/modules/iam/iam.module';
-import { UsersModule } from 'src/modules/users/users.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
@@ -10,7 +6,11 @@ import { ThrottlerModule, minutes } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Redis } from 'ioredis';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
+import appConfigSchema from 'src/common/schemas/app-config.schema';
+import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
+import { IamModule } from 'src/modules/iam/iam.module';
+import { UsersModule } from 'src/modules/users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -25,14 +25,19 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
       load: [appConfig, databaseConfig],
       validationSchema: appConfigSchema,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DATABASE_HOST,
-      port: +process.env.DATABASE_PORT || 5432,
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      autoLoadEntities: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.user'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.name'),
+        synchronize: configService.get<boolean>('database.synchronize'),
+        autoLoadEntities: true,
+      }),
     }),
     RedisModule.forRootAsync({
       imports: [ConfigModule],
