@@ -3,14 +3,9 @@ services:
     image: postgres:16.3-alpine3.20
     restart: always
     user: postgres
-    secrets:
-      - database-password
     volumes:
       - database-data:/var/lib/postgresql/data
     env_file: ./server/.env.dev
-    environment:
-      POSTGRES_PASSWORD_FILE: /run/secrets/database-password
-      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - 5432:5432
     expose:
@@ -45,7 +40,3 @@ services:
 volumes:
   database-data:
   redis-data:
-
-secrets:
-  database-password:
-    file: ./secrets/database/password.txt
