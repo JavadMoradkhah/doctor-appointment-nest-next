@@ -1,7 +1,7 @@
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
-import { HashingService } from 'src/iam/hashing/hashing.service';
+import { HashingService } from 'src/modules/iam/hashing/hashing.service';
 
 @Injectable()
 export class OtpStorage {

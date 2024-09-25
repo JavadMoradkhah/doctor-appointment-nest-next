@@ -8,8 +8,8 @@ import {
 import { ConfigType } from '@nestjs/config';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import accessTokenConfig from 'src/iam/config/access-token.config';
-import { REQUEST_USER_KEY } from 'src/iam/iam.constants';
+import accessTokenConfig from 'src/modules/iam/config/access-token.config';
+import { REQUEST_USER_KEY } from 'src/modules/iam/iam.constants';
 import {
   ERR_MSG_INVALID_TOKEN,
   ERR_MSG_LOGIN_REQUIRED,

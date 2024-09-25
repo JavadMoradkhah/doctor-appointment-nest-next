@@ -1,8 +1,8 @@
+import { JOB_OTP_SMS, QUEUE_OTP_SMS } from 'src/modules/iam/iam.constants';
+import { OnQueueError, OnQueueFailed, Process, Processor } from '@nestjs/bull';
+import { Logger } from '@nestjs/common';
 import axios from 'axios';
 import { Job } from 'bull';
-import { Logger } from '@nestjs/common';
-import { OnQueueError, OnQueueFailed, Process, Processor } from '@nestjs/bull';
-import { JOB_OTP_SMS, QUEUE_OTP_SMS } from 'src/iam/iam.constants';
 import { OtpSms } from './interfaces/jobs/otp-sms.job';
 
 @Processor(QUEUE_OTP_SMS)

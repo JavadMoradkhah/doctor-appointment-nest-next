@@ -11,7 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Queue } from 'bull';
 import { Request } from 'express';
 import { TooManyRequestsException } from 'src/common/exceptions/too-many-requests.exception';
-import { JOB_OTP_SMS, QUEUE_OTP_SMS } from 'src/iam/iam.constants';
+import { JOB_OTP_SMS, QUEUE_OTP_SMS } from 'src/modules/iam/iam.constants';
 import { Repository } from 'typeorm';
 import { ulid } from 'ulid';
 import { User } from '../../users/entities/user.entity';

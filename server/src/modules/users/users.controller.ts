@@ -12,8 +12,8 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationInterceptor } from 'src/common/interceptors/pagination.interceptor';
 import { PaginationData } from 'src/common/types/pagination-data.interface';
-import { ActiveUser } from 'src/iam/authentication/decorators/active-user.decorator';
-import { Roles } from 'src/iam/authorization/decorators/roles.decorator';
+import { ActiveUser } from 'src/modules/iam/authentication/decorators/active-user.decorator';
+import { Roles } from 'src/modules/iam/authorization/decorators/roles.decorator';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';

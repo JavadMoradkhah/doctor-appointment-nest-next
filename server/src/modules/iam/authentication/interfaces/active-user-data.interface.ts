@@ -1,4 +1,4 @@
-import { UserRole } from 'src/users/enums/user-role.enum';
+import { UserRole } from 'src/modules/users/enums/user-role.enum';
 
 export interface ActiveUserData {
   sub: number;

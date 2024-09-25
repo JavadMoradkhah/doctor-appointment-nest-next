@@ -1,3 +1,7 @@
+import appConfigSchema from 'src/common/schemas/app-config.schema';
+import appConfig from 'src/config/app.config';
+import { IamModule } from 'src/modules/iam/iam.module';
+import { UsersModule } from 'src/modules/users/users.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
@@ -8,10 +12,6 @@ import { Redis } from 'ioredis';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import appConfigSchema from './common/schemas/app-config.schema';
-import appConfig from './config/app.config';
-import { IamModule } from './iam/iam.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
