@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PG_ERROR_CODE_UNIQUE_VIOLATION } from 'src/common/constants/database.constants';
-import { PaginationData } from 'src/common/types/pagination-data.interface';
 import { IsNull, Not, Repository } from 'typeorm';
+import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
+import { PaginationService } from '../pagination/providers/pagination.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { UsersListQueryDto } from './dto/users-list-query.dto';
 import { Profile } from './entities/profile.entity';
 import { User } from './entities/user.entity';
 import {
@@ -30,9 +30,10 @@ export class UsersService {
     private readonly usersRepo: Repository<User>,
     @InjectRepository(Profile)
     private readonly profilesRepo: Repository<Profile>,
+    private readonly paginationService: PaginationService,
   ) {}
 
-  async findAll(query: UsersListQueryDto): Promise<PaginationData> {
+  async findAll(paginationQuery: PaginationQueryDto) {
     const [users, count] = await this.usersRepo.findAndCount({
       select: {
         id: true,
@@ -48,11 +49,11 @@ export class UsersService {
       relations: {
         profile: true,
       },
-      skip: (query.page - 1) * query.limit,
-      take: query.limit,
+      skip: (paginationQuery.page - 1) * paginationQuery.limit,
+      take: paginationQuery.limit,
     });
 
-    return { page: query.page, limit: query.limit, data: users, count: count };
+    return this.paginationService.paginate(paginationQuery, users, count);
   }
 
   async findOne(id: number) {

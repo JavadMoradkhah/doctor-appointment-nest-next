@@ -7,17 +7,14 @@ import {
   Patch,
   Post,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { PaginationInterceptor } from 'src/common/interceptors/pagination.interceptor';
-import { PaginationData } from 'src/common/types/pagination-data.interface';
 import { ActiveUser } from 'src/modules/iam/authentication/decorators/active-user.decorator';
 import { Roles } from 'src/modules/iam/authorization/decorators/roles.decorator';
+import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { UsersListQueryDto } from './dto/users-list-query.dto';
 import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';
 
@@ -29,9 +26,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseInterceptors(PaginationInterceptor)
-  findAll(@Query() query: UsersListQueryDto): Promise<PaginationData> {
-    return this.usersService.findAll(query);
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
+    return this.usersService.findAll(paginationQuery);
   }
 
   @Roles()
