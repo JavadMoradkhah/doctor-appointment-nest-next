@@ -13,10 +13,13 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+const NODE_ENV = process.env.NODE_ENV;
+const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
+
 @Module({
   imports: [
     ConfigModule.forRoot({
-      ignoreEnvFile: true,
+      envFilePath: ENV_FILE,
       cache: true,
       load: [appConfig],
       validationSchema: appConfigSchema,
