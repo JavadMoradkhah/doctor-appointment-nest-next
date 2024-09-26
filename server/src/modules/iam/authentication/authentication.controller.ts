@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
-import { ThrottlerGuard } from '@nestjs/throttler';
 import { Request, Response } from 'express';
 import refreshTokenConfig from '../config/refresh-token.config';
 import {
@@ -28,7 +27,7 @@ import accessTokenConfig from '../config/access-token.config';
 
 @ApiTags('auth')
 @Controller('auth')
-@UseGuards(ThrottlerGuard)
+// @UseGuards(ThrottlerGuard)
 @Auth(AuthType.None)
 export class AuthenticationController {
   constructor(

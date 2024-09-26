@@ -2,10 +2,7 @@ import { RedisModule } from '@nestjs-modules/ioredis';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ThrottlerModule, minutes } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Redis } from 'ioredis';
-import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import appConfigSchema from 'src/common/schemas/app-config.schema';
 import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
@@ -57,19 +54,19 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
       }),
       inject: [ConfigService],
     }),
-    ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        throttlers: [{ ttl: minutes(1), limit: 1 }],
-        storage: new ThrottlerStorageRedisService(
-          new Redis({
-            host: configService.get('redis.host'),
-            port: configService.get('redis.port'),
-          }),
-        ),
-      }),
-    }),
+    // ThrottlerModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (configService: ConfigService) => ({
+    //     throttlers: [{ ttl: minutes(1), limit: 1 }],
+    //     storage: new ThrottlerStorageRedisService(
+    //       new Redis({
+    //         host: configService.get('redis.host'),
+    //         port: configService.get('redis.port'),
+    //       }),
+    //     ),
+    //   }),
+    // }),
     UsersModule,
     IamModule,
   ],
