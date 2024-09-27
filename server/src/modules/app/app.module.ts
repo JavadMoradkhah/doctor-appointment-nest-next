@@ -10,6 +10,7 @@ import { IamModule } from 'src/modules/iam/iam.module';
 import { UsersModule } from 'src/modules/users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { SpecializationsModule } from '../specializations/specializations.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
@@ -69,6 +70,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     // }),
     UsersModule,
     IamModule,
+    SpecializationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
