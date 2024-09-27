@@ -11,6 +11,16 @@ export const COOKIE_REFRESH_TOKEN = 'refreshToken';
 export const MSG_YOU_HAVE_SUCCESSFULLY_LOGGED_IN =
   'با موفقیت وارد حساب کاربری شدید';
 
+export const MSG_YOU_HAVE_SUCCESSFULLY_SIGNED_UP =
+  'حساب کاربری با موفقیت ایجاد شد';
+
+export const ERR_MSG_YOU_DO_NOT_HAVE_AN_ACCOUNT = 'شما هنوز ثبت نام نکرده اید';
+
+export const ERR_MSG_YOU_ALREADY_SIGNED_UP =
+  'شما قبلا با این شماره موبایل ثبت نام کرده اید';
+
+export const ERR_MSG_NATIONAL_CODE_UNIQUENESS_VIOLATION = 'کد ملی تکراری است';
+
 // Error Messages
 export const ERR_MSG_PASSWORD =
   'کلمه عبور باید حداقل شامل یک حرف بزرگ، یک حرف کوچک و یک عدد باشد';
