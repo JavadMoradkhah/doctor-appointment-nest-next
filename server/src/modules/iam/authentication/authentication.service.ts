@@ -1,5 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
 import {
+  BadRequestException,
+  ConflictException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -25,12 +27,16 @@ import {
   ERR_MSG_INVALID_OTP,
   ERR_MSG_INVALID_TOKEN,
   ERR_MSG_LOGIN_REQUIRED,
+  ERR_MSG_NATIONAL_CODE_UNIQUENESS_VIOLATION,
   ERR_MSG_OTP_HAS_NOT_BEEN_SENT_OR_EXPIRED,
   ERR_MSG_OTP_HAS_NOT_EXPIRED_YET,
   ERR_MSG_TOKEN_EXPIRED,
+  ERR_MSG_YOU_ALREADY_SIGNED_UP,
+  ERR_MSG_YOU_DO_NOT_HAVE_AN_ACCOUNT,
 } from './authentication.constants';
+import { LoginDto } from './dto/login.dto';
 import { SendOtpDto } from './dto/send-otp.dto';
-import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { AccessTokenPayload } from './interfaces/access-token-payload.interface';
 import { RefreshTokenPayload } from './interfaces/refresh-token-payload.interface';
 import { OtpStorage } from './storages/otp.storage';
@@ -65,45 +71,71 @@ export class AuthenticationService {
 
     const otpCode = this.otpStorage.generateOtp();
 
-    const job = await this.smsQueue.add(JOB_OTP_SMS, {
+    await this.otpStorage.save(phone, otpCode);
+
+    await this.smsQueue.add(JOB_OTP_SMS, {
       phone: phone,
       otp: otpCode,
     });
-
-    await this.otpStorage.save(phone, otpCode);
   }
 
-  async verifyOtp({ phone, otp }: VerifyOtpDto) {
-    const otpInCache = await this.otpStorage.getOtp(phone);
+  async login({ phone, otp }: LoginDto) {
+    await this.verifyOtp(phone, otp);
 
-    if (!otpInCache) {
-      throw new UnauthorizedException(ERR_MSG_OTP_HAS_NOT_BEEN_SENT_OR_EXPIRED);
+    const user = await this.usersRepo.findOneBy({ phone: phone });
+
+    if (!user) {
+      throw new BadRequestException(ERR_MSG_YOU_DO_NOT_HAVE_AN_ACCOUNT);
     }
 
-    if (!(await this.otpStorage.verify(otp, otpInCache))) {
-      throw new UnauthorizedException(ERR_MSG_INVALID_OTP);
+    if (!user.isActive) {
+      throw new ForbiddenException(ERR_MSG_ACCOUNT_IS_INACTIVE);
     }
+
+    const tokens = await this.generateTokens(user);
 
     // Remove the verified OTP from redis
     await this.otpStorage.remove(phone);
 
-    let user = await this.usersRepo.findOneBy({ phone: phone });
+    return tokens;
+  }
 
-    // Check for inactive accounts and prevent them from logging in
-    if (user && !user.isActive) {
-      throw new ForbiddenException(ERR_MSG_ACCOUNT_IS_INACTIVE);
+  async signUp(signUpDto: SignUpDto) {
+    await this.verifyOtp(signUpDto.phone, signUpDto.otp);
+
+    const userExists = await this.usersRepo.existsBy({
+      phone: signUpDto.phone,
+    });
+
+    if (userExists) {
+      throw new ConflictException(ERR_MSG_YOU_ALREADY_SIGNED_UP);
     }
 
-    // Create the user if they don't have an account
-    if (!user) {
-      user = await this.usersRepo.save(
-        this.usersRepo.create({
-          phone: phone,
-        }),
-      );
+    const nationCodeExists = await this.usersRepo.existsBy({
+      nationCode: signUpDto.nationCode,
+    });
+
+    if (nationCodeExists) {
+      throw new ConflictException(ERR_MSG_NATIONAL_CODE_UNIQUENESS_VIOLATION);
     }
 
-    return await this.generateTokens(user);
+    const user = await this.usersRepo.save(
+      this.usersRepo.create({
+        firstName: signUpDto.firstName,
+        lastName: signUpDto.lastName,
+        phone: signUpDto.phone,
+        gender: signUpDto.gender,
+        dateOfBirth: signUpDto.dateOfBirth,
+        nationCode: signUpDto.nationCode,
+      }),
+    );
+
+    const tokens = await this.generateTokens(user);
+
+    // Remove the verified OTP from redis
+    await this.otpStorage.remove(signUpDto.phone);
+
+    return tokens;
   }
 
   async refreshTokens(request: Request) {
@@ -153,6 +185,20 @@ export class AuthenticationService {
       } else {
         throw error;
       }
+    }
+  }
+
+  private async verifyOtp(phone: string, otp: string) {
+    const otpInCache = await this.otpStorage.getOtp(phone);
+
+    if (!otpInCache) {
+      throw new UnauthorizedException(ERR_MSG_OTP_HAS_NOT_BEEN_SENT_OR_EXPIRED);
+    }
+
+    const otpIsValid = await this.otpStorage.verify(otp, otpInCache);
+
+    if (!otpIsValid) {
+      throw new UnauthorizedException(ERR_MSG_INVALID_OTP);
     }
   }
 
