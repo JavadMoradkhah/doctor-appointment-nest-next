@@ -6,17 +6,16 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PG_ERROR_CODE_UNIQUE_VIOLATION } from 'src/common/constants/database.constants';
-import { IsNull, Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { ERR_MSG_NATIONAL_CODE_UNIQUENESS_VIOLATION } from '../iam/authentication/authentication.constants';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { PaginationService } from '../pagination/providers/pagination.service';
-import { CreateProfileDto } from './dto/create-profile.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { Profile } from './entities/profile.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import {
   ERR_MSG_NATION_CODE_ALREADY_EXISTS,
-  ERR_MSG_PROFILE_HAS_NOT_BEEN_CREATED,
   ERR_MSG_USER_ALREADY_EXISTS,
   ERR_MSG_USER_WAS_NOT_FOUND,
   ERR_MSG_YOU_ARE_NOT_ALLOWED_TO_ACTIVATE_YOUR_OWN_ACCOUNT,
@@ -28,8 +27,6 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepo: Repository<User>,
-    @InjectRepository(Profile)
-    private readonly profilesRepo: Repository<Profile>,
     private readonly paginationService: PaginationService,
   ) {}
 
@@ -37,17 +34,12 @@ export class UsersService {
     const [users, count] = await this.usersRepo.findAndCount({
       select: {
         id: true,
+        firstName: true,
+        lastName: true,
         phone: true,
-        isActive: true,
         role: true,
-        profile: {
-          firstName: true,
-          lastName: true,
-          gender: true,
-        },
-      },
-      relations: {
-        profile: true,
+        isActive: true,
+        joinedAt: true,
       },
       skip: (paginationQuery.page - 1) * paginationQuery.limit,
       take: paginationQuery.limit,
@@ -57,12 +49,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const user = await this.usersRepo.findOne({
-      where: {
-        id,
-      },
-      relations: ['profile'],
-    });
+    const user = await this.usersRepo.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException(ERR_MSG_USER_WAS_NOT_FOUND);
@@ -71,81 +58,78 @@ export class UsersService {
     return user;
   }
 
-  async getProfile(userId: number) {
-    const profile = await this.usersRepo.findOne({
-      relations: {
-        profile: true,
-      },
-      where: {
-        id: userId,
-        profile: {
-          id: Not(IsNull()),
-        },
-      },
+  async create(createUserDto: CreateUserDto) {
+    const userExists = await this.usersRepo.existsBy({
+      phone: createUserDto.phone,
     });
-
-    if (!profile) {
-      throw new NotFoundException(ERR_MSG_PROFILE_HAS_NOT_BEEN_CREATED);
-    }
-
-    return profile;
-  }
-
-  async create({ phone, role }: CreateUserDto) {
-    const userExists = await this.usersRepo.existsBy({ phone });
 
     if (userExists) {
       throw new ConflictException(ERR_MSG_USER_ALREADY_EXISTS);
     }
 
-    const user = this.usersRepo.create({ phone, role });
+    const nationCodeExists = await this.usersRepo.existsBy({
+      nationCode: createUserDto.nationCode,
+    });
+
+    if (nationCodeExists) {
+      throw new ConflictException(ERR_MSG_NATION_CODE_ALREADY_EXISTS);
+    }
+
+    const user = this.usersRepo.create(createUserDto);
 
     return await this.usersRepo.save(user);
   }
 
-  async createProfile(userId: number, createProfileDto: CreateProfileDto) {
+  async updateMe(userId: number, updateProfileDto: UpdateProfileDto) {
     try {
-      const profile = await this.profilesRepo.save(
-        this.profilesRepo.create({
-          user: {
-            id: userId,
-          },
-          ...createProfileDto,
-        }),
-      );
-
-      return profile;
+      let user = await this.findOne(userId);
+      user = { ...user, ...updateProfileDto };
+      return this.usersRepo.save(user);
     } catch (error) {
       if (error.code === PG_ERROR_CODE_UNIQUE_VIOLATION) {
-        throw new ConflictException(ERR_MSG_NATION_CODE_ALREADY_EXISTS);
+        throw new ConflictException(ERR_MSG_NATIONAL_CODE_UNIQUENESS_VIOLATION);
       }
       throw error;
     }
   }
 
-  async updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
-    try {
-      let profile = await this.profilesRepo.findOne({
-        where: {
-          user: {
-            id: userId,
-          },
-        },
+  async update(userId: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(userId);
+
+    if (updateUserDto.phone && updateUserDto.phone !== user.phone) {
+      const phoneExists = await this.usersRepo.existsBy({
+        phone: updateUserDto.phone,
       });
 
-      if (!profile) {
-        throw new NotFoundException(ERR_MSG_PROFILE_HAS_NOT_BEEN_CREATED);
+      if (phoneExists) {
+        throw new ConflictException(ERR_MSG_USER_ALREADY_EXISTS);
       }
 
-      profile = Object.assign(profile, updateProfileDto);
+      user.phone = updateUserDto.phone;
+    }
 
-      return this.profilesRepo.save(profile);
-    } catch (error) {
-      if (error.code === PG_ERROR_CODE_UNIQUE_VIOLATION) {
+    if (
+      updateUserDto.nationCode &&
+      updateUserDto.nationCode !== user.nationCode
+    ) {
+      const nationCodeExists = await this.usersRepo.existsBy({
+        nationCode: updateUserDto.nationCode,
+      });
+
+      if (nationCodeExists) {
         throw new ConflictException(ERR_MSG_NATION_CODE_ALREADY_EXISTS);
       }
-      throw error;
+
+      user.nationCode = updateUserDto.nationCode;
     }
+
+    user.firstName = updateUserDto.firstName ?? user.firstName;
+    user.lastName = updateUserDto.lastName ?? user.lastName;
+    user.gender = updateUserDto.gender ?? user.gender;
+    user.dateOfBirth = updateUserDto.dateOfBirth ?? user.dateOfBirth;
+    user.role = updateUserDto.role ?? user.role;
+
+    return this.usersRepo.save(user);
   }
 
   async activate(userId: number, authenticatedUserId: number) {

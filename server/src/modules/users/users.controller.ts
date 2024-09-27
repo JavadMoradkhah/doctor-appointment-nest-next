@@ -12,11 +12,11 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ActiveUser } from 'src/modules/iam/authentication/decorators/active-user.decorator';
 import { Roles } from 'src/modules/iam/authorization/decorators/roles.decorator';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
-import { CreateProfileDto } from './dto/create-profile.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -30,10 +30,24 @@ export class UsersController {
     return this.usersService.findAll(paginationQuery);
   }
 
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+
   @Roles()
-  @Get('profile')
-  getProfile(@ActiveUser('sub') id: number) {
-    return this.usersService.getProfile(id);
+  @Get('me')
+  getMe(@ActiveUser('sub') id: number) {
+    return this.usersService.findOne(id);
+  }
+
+  @Roles()
+  @Patch('me')
+  updateMe(
+    @ActiveUser('sub') userId: number,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    return this.usersService.updateMe(userId, updateProfileDto);
   }
 
   @Get(':id')
@@ -41,27 +55,10 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
   @Roles()
-  @Post('profile')
-  createProfile(
-    @ActiveUser('sub') id: number,
-    @Body() createProfileDto: CreateProfileDto,
-  ) {
-    return this.usersService.createProfile(id, createProfileDto);
-  }
-
-  @Roles()
-  @Patch('profile')
-  updateProfile(
-    @ActiveUser('sub') userId: number,
-    @Body() updateProfileDto: UpdateProfileDto,
-  ) {
-    return this.usersService.updateProfile(userId, updateProfileDto);
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Patch(':id/activate')
