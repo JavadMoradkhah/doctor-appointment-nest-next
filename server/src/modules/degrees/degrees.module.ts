@@ -8,5 +8,6 @@ import { Degree } from './entities/degree.entity';
   imports: [TypeOrmModule.forFeature([Degree])],
   controllers: [DegreesController],
   providers: [DegreesService],
+  exports: [DegreesService],
 })
 export class DegreesModule {}
