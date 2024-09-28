@@ -69,19 +69,6 @@ export class SpecializationsService {
       }
       throw error;
     }
-
-    // const queryRunner = this.dataSource.createQueryRunner();
-
-    // await queryRunner.connect();
-
-    // await queryRunner.startTransaction();
-
-    // try {
-    // } catch (error) {
-    //   queryRunner.rollbackTransaction();
-    // } finally {
-    //   queryRunner.release();
-    // }
   }
 
   async update(id: number, updateSpecializationDto: UpdateSpecializationDto) {
