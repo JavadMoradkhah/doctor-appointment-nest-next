@@ -82,9 +82,12 @@ export class UsersService {
 
   async updateMe(userId: number, updateProfileDto: UpdateProfileDto) {
     try {
-      let user = await this.findOne(userId);
-      user = { ...user, ...updateProfileDto };
-      return this.usersRepo.save(user);
+      const user = await this.findOne(userId);
+
+      return this.usersRepo.save({
+        ...user,
+        ...updateProfileDto,
+      });
     } catch (error) {
       if (error.code === PG_ERROR_CODE_UNIQUE_VIOLATION) {
         throw new ConflictException(ERR_MSG_NATIONAL_CODE_UNIQUENESS_VIOLATION);
