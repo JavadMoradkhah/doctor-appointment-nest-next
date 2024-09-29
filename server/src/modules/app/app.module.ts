@@ -9,6 +9,7 @@ import databaseConfig from 'src/config/database.config';
 import { IamModule } from 'src/modules/iam/iam.module';
 import { UsersModule } from 'src/modules/users/users.module';
 import { DegreesModule } from '../degrees/degrees.module';
+import { DoctorsModule } from '../doctors/doctors.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -73,6 +74,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     IamModule,
     SpecializationsModule,
     DegreesModule,
+    DoctorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
