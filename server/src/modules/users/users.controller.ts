@@ -13,10 +13,10 @@ import { ActiveUser } from 'src/modules/iam/authentication/decorators/active-use
 import { Roles } from 'src/modules/iam/authorization/decorators/roles.decorator';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole } from './enums/user-role.enum';
-import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserRole } from './enums/user-role.enum';
+import { UsersService } from './users.service';
 
 @ApiTags('users')
 @ApiBearerAuth()
