@@ -121,8 +121,12 @@ export class DoctorsService {
     return doctor;
   }
 
-  async create(createDoctorDto: CreateDoctorDto, avatar?: Express.Multer.File) {
-    const user = await this.usersService.findOne(createDoctorDto.userId);
+  async create(
+    userId: number,
+    createDoctorDto: CreateDoctorDto,
+    avatar?: Express.Multer.File,
+  ) {
+    const user = await this.usersService.findOne(userId);
 
     if (user.role !== UserRole.DOCTOR) {
       throw new BadRequestException(ERR_MSG_GIVEN_USER_IS_NOT_A_DOCTOR);

@@ -43,24 +43,18 @@ export class DoctorsController {
     return this.doctorsService.findOne(id, userRole);
   }
 
-  @Get('me')
-  @Roles(UserRole.DOCTOR)
-  me(@ActiveUser('sub') id: number) {
-    return this.doctorsService.me(id);
-  }
-
   @Post()
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.DOCTOR)
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: CreateDoctorDto })
   @UseInterceptors(FileInterceptor('avatar'))
   create(
+    @ActiveUser('sub') userId: number,
     @Body() createDoctorDto: CreateDoctorDto,
     @UploadedFile(ParseImageFilePipe({ fileIsRequired: false }))
     avatar: Express.Multer.File,
   ) {
-    console.log(createDoctorDto);
-    return this.doctorsService.create(createDoctorDto, avatar);
+    return this.doctorsService.create(userId, createDoctorDto, avatar);
   }
 
   @Patch('me')

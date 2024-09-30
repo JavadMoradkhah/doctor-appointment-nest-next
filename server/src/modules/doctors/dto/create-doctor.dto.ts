@@ -19,13 +19,6 @@ export class CreateDoctorDto {
   @IsPositive()
   @IsNotEmpty()
   @Type(() => Number)
-  userId: number;
-
-  @IsNumber()
-  @IsInt()
-  @IsPositive()
-  @IsNotEmpty()
-  @Type(() => Number)
   specializationId: number;
 
   @IsNumber()
