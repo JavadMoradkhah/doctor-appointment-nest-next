@@ -37,6 +37,12 @@ export class DoctorsController {
     return this.doctorsService.findAll(paginationQueryDto, userRole);
   }
 
+  @Get('me')
+  @Roles(UserRole.DOCTOR)
+  me(@ActiveUser('sub') id: number) {
+    return this.doctorsService.me(id);
+  }
+
   @Get(':id')
   @Roles()
   findOne(@Param('id') id: number, @ActiveUser('role') userRole: UserRole) {
