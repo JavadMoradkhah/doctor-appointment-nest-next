@@ -175,11 +175,11 @@ export class DoctorsService {
     }
 
     if (
-      updateDoctorDto.userId &&
-      updateDoctorDto.userId !== doctor.specialization.id
+      updateDoctorDto.specializationId &&
+      updateDoctorDto.specializationId !== doctor.specialization.id
     ) {
       const specialization = await this.specializationsService.findOne(
-        updateDoctorDto.userId,
+        updateDoctorDto.specializationId,
       );
 
       doctor.specialization = specialization;
