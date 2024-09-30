@@ -118,4 +118,11 @@ export class AuthenticationController {
       expires: new Date(Date.now() + this.refreshTokenConfiguration.ttl * 1000),
     });
   }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie(COOKIE_ACCESS_TOKEN);
+    res.clearCookie(COOKIE_REFRESH_TOKEN);
+  }
 }
