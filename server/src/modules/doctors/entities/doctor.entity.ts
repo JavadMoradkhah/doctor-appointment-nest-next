@@ -1,5 +1,6 @@
 import { IPostgresInterval } from 'postgres-interval';
 import { Degree } from 'src/modules/degrees/entities/degree.entity';
+import { Schedule } from 'src/modules/schedules/entities/schedule.entity';
 import { Service } from 'src/modules/services/entities/service.entity';
 import { Specialization } from 'src/modules/specializations/entities/specialization.entity';
 import { User } from 'src/modules/users/entities/user.entity';
@@ -62,4 +63,7 @@ export class Doctor {
 
   @OneToMany(() => Service, (service) => service.doctor)
   services: Service[];
+
+  @OneToMany(() => Schedule, (schedule) => schedule.doctor)
+  schedules: Schedule[];
 }
