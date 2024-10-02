@@ -25,8 +25,6 @@ export function MinTimeDifferenceWith(
           const sourceTime = parseTime(time);
           const targetTime = parseTime(targetValue);
 
-          console.log({ sourceTime, targetTime });
-
           if (!sourceTime || !targetTime) return false;
 
           return (
