@@ -6,6 +6,7 @@ import {
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -19,6 +20,9 @@ export class Schedule {
     onDelete: 'CASCADE',
   })
   doctor: Doctor;
+
+  @RelationId((schedule: Schedule) => schedule.doctor)
+  doctorId: number;
 
   @Column({ type: 'smallint' })
   day: number;
