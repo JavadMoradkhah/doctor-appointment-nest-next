@@ -9,9 +9,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Doctor } from '../../doctors/entities/doctor.entity';
+import { Weekday } from '../enums/weekday.enum';
 
 @Entity('schedules')
-@Index(['doctor', 'day'], { unique: true })
+@Index(['doctor', 'weekday'], { unique: true })
 export class Schedule {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -24,8 +25,8 @@ export class Schedule {
   @RelationId((schedule: Schedule) => schedule.doctor)
   doctorId: number;
 
-  @Column({ type: 'smallint' })
-  day: number;
+  @Column({ type: 'enum', enum: Weekday })
+  weekday: Weekday;
 
   @Column({ type: 'time without time zone' })
   startAt: Date;
