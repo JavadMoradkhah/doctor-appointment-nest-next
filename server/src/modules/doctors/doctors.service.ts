@@ -106,7 +106,7 @@ export class DoctorsService {
   }
 
   async me(id: number) {
-    const doctor = this.doctorsRepo.findOne({
+    const doctor = await this.doctorsRepo.findOne({
       where: { userId: id },
       relations: {
         user: true,
