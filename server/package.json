@@ -23,7 +23,7 @@
     "db:createMigration": "npx typeorm-ts-node-commonjs migration:create -d src/orm.datasource.ts",
     "db:generateMigration": "npx typeorm-ts-node-commonjs migration:generate -d src/orm.datasource.ts",
     "db:revertMigration": "npx typeorm-ts-node-commonjs migration:revert -d src/orm.datasource.ts",
-    "db:sync:": "npx typeorm-ts-node-commonjs schema:sync -d src/orm.datasource.ts",
+    "db:sync": "npx typeorm-ts-node-commonjs schema:sync -d src/orm.datasource.ts",
     "db:drop": "npx typeorm-ts-node-commonjs schema:drop -d src/orm.datasource.ts"
   },
   "dependencies": {
