@@ -10,3 +10,9 @@ export const ERR_MSG_DOCTOR_PROFILE_ALREADY_EXISTS =
 
 export const ERR_MSG_GIVEN_USER_IS_NOT_A_DOCTOR =
   'کاربر مشخص شده یک پزشک نمی باشد';
+
+export const ERR_MSG_APPOINTMENTS_GAP_MIN_TIME =
+  'زمان ویزیت حداقل باید 5 دقیقه باشد';
+
+export const ERR_MSG_APPOINTMENTS_GAP_MAX_TIME =
+  'زمان ویزیت حداکثر باید 1 ساعت باشد';
