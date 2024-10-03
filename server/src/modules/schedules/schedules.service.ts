@@ -34,7 +34,7 @@ export class SchedulesService {
 
     const scheduleExists = await this.schedulesRepo.existsBy({
       doctor: { userId },
-      day: createScheduleDto.day,
+      weekday: createScheduleDto.weekday,
     });
 
     if (scheduleExists) {
@@ -44,7 +44,7 @@ export class SchedulesService {
     const schedule = await this.schedulesRepo.save(
       this.schedulesRepo.create({
         doctor: { userId },
-        day: createScheduleDto.day,
+        weekday: createScheduleDto.weekday,
         startAt: createScheduleDto.startAt,
         endAt: createScheduleDto.endAt,
       }),
@@ -56,7 +56,7 @@ export class SchedulesService {
   async findAll(userId: number) {
     const schedules = await this.schedulesRepo.find({
       where: { doctor: { userId } },
-      order: { day: 'ASC' },
+      order: { weekday: 'ASC' },
     });
 
     return schedules;
