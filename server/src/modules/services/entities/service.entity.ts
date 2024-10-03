@@ -1,4 +1,3 @@
-import { Doctor } from 'src/modules/doctors/entities/doctor.entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Doctor } from '../../doctors/entities/doctor.entity';
 
 @Entity('services')
 @Index(['doctor', 'title'], { unique: true })

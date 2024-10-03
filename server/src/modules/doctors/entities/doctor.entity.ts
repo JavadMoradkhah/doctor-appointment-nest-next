@@ -1,9 +1,4 @@
 import { IPostgresInterval } from 'postgres-interval';
-import { Degree } from 'src/modules/degrees/entities/degree.entity';
-import { Schedule } from 'src/modules/schedules/entities/schedule.entity';
-import { Service } from 'src/modules/services/entities/service.entity';
-import { Specialization } from 'src/modules/specializations/entities/specialization.entity';
-import { User } from 'src/modules/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -16,6 +11,11 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Degree } from '../../degrees/entities/degree.entity';
+import { Schedule } from '../../schedules/entities/schedule.entity';
+import { Service } from '../../services/entities/service.entity';
+import { Specialization } from '../../specializations/entities/specialization.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('doctors')
 export class Doctor {

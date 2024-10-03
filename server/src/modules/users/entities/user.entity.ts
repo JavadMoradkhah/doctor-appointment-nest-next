@@ -5,9 +5,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Doctor } from '../../doctors/entities/doctor.entity';
 import { UserGender } from '../enums/user-gender.enum';
 import { UserRole } from '../enums/user-role.enum';
-import { Doctor } from 'src/modules/doctors/entities/doctor.entity';
 
 @Entity('users')
 export class User {

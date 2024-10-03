@@ -1,4 +1,3 @@
-import { Doctor } from 'src/modules/doctors/entities/doctor.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Doctor } from '../../doctors/entities/doctor.entity';
 
 @Entity('schedules')
 @Index(['doctor', 'day'], { unique: true })
