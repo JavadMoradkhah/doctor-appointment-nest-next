@@ -17,7 +17,7 @@ export class CreateScheduleDto {
   @IsString()
   @IsNotEmpty()
   @IsTime({ message: ERR_MSG_INVALID_TIME })
-  startAt: string;
+  startsAt: string;
 
   @IsString()
   @IsNotEmpty()
@@ -28,5 +28,5 @@ export class CreateScheduleDto {
   @MaxTimeDifferenceWith('startAt', 12 * 60 * 60, {
     message: ERR_MSG_SCHEDULE_MAX_HOURS,
   })
-  endAt: string;
+  endsAt: string;
 }
