@@ -29,10 +29,10 @@ export class Schedule {
   weekday: Weekday;
 
   @Column({ type: 'time without time zone' })
-  startAt: Date;
+  startsAt: Date;
 
   @Column({ type: 'time without time zone' })
-  endAt: Date;
+  endsAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;
