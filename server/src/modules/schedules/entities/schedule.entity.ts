@@ -28,11 +28,20 @@ export class Schedule {
   @Column({ type: 'enum', enum: Weekday })
   weekday: Weekday;
 
+  @Column({ type: 'string', length: 50 })
+  dayName: string;
+
   @Column({ type: 'time without time zone' })
   startsAt: Date;
 
   @Column({ type: 'time without time zone' })
   endsAt: Date;
+
+  @Column({ type: 'time without time zone', nullable: true })
+  breakStartsAt: Date;
+
+  @Column({ type: 'time without time zone', nullable: true })
+  breakEndsAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;
