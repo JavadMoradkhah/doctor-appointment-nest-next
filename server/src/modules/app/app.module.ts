@@ -12,7 +12,6 @@ import { DegreesModule } from '../degrees/degrees.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { HolidaysModule } from '../holidays/holidays.module';
 import { SchedulesModule } from '../schedules/schedules.module';
-import { ServicesModule } from '../services/services.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -78,7 +77,6 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     SpecializationsModule,
     DegreesModule,
     DoctorsModule,
-    ServicesModule,
     SchedulesModule,
     HolidaysModule,
   ],
