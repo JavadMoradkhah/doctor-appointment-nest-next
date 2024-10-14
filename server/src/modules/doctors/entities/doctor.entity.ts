@@ -1,4 +1,5 @@
 import { IPostgresInterval } from 'postgres-interval';
+import { Office } from 'src/modules/offices/entities/office.entity';
 import {
   Column,
   CreateDateColumn,
@@ -62,4 +63,7 @@ export class Doctor {
 
   @OneToMany(() => Schedule, (schedule) => schedule.doctor)
   schedules: Schedule[];
+
+  @OneToOne(() => Office, (office) => office.doctor)
+  office: Office;
 }
