@@ -28,7 +28,7 @@ export class Schedule {
   @Column({ type: 'enum', enum: Weekday })
   weekday: Weekday;
 
-  @Column({ type: 'string', length: 50 })
+  @Column({ type: 'varchar', length: 50 })
   dayName: string;
 
   @Column({ type: 'time without time zone' })
