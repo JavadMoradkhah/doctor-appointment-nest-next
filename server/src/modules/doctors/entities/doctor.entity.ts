@@ -13,7 +13,6 @@ import {
 } from 'typeorm';
 import { Degree } from '../../degrees/entities/degree.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
-import { Service } from '../../services/entities/service.entity';
 import { Specialization } from '../../specializations/entities/specialization.entity';
 import { User } from '../../users/entities/user.entity';
 
@@ -60,9 +59,6 @@ export class Doctor {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToMany(() => Service, (service) => service.doctor)
-  services: Service[];
 
   @OneToMany(() => Schedule, (schedule) => schedule.doctor)
   schedules: Schedule[];

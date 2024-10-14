@@ -94,7 +94,6 @@ export class DoctorsService {
         user: true,
         specialization: true,
         degree: true,
-        services: true,
       },
     });
 
@@ -112,7 +111,6 @@ export class DoctorsService {
         user: true,
         specialization: true,
         degree: true,
-        services: true,
       },
     });
 
