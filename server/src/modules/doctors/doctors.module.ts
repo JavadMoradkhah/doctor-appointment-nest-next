@@ -8,6 +8,7 @@ import { UsersModule } from '../users/users.module';
 import { DoctorsController } from './doctors.controller';
 import { DoctorsService } from './doctors.service';
 import { Doctor } from './entities/doctor.entity';
+import { FindDoctorProvider } from './providers/find-doctor.provider';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { Doctor } from './entities/doctor.entity';
     DegreesModule,
   ],
   controllers: [DoctorsController],
-  providers: [DoctorsService],
+  providers: [DoctorsService, FindDoctorProvider],
+  exports: [FindDoctorProvider],
 })
 export class DoctorsModule {}
