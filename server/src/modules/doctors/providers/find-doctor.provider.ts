@@ -20,8 +20,8 @@ export class FindDoctorProvider implements FinderProvider {
     private readonly doctorsRepo: Repository<Doctor>,
   ) {}
 
-  findOr404(userId: number) {
-    const doctor = this.doctorsRepo.findOneBy({ userId });
+  async findOr404(userId: number) {
+    const doctor = await this.doctorsRepo.findOneBy({ userId });
 
     if (!doctor) {
       throw new NotFoundException(ERR_MSG_DOCTOR_ACCOUNT_WAS_NOT_FOUND);
@@ -30,8 +30,8 @@ export class FindDoctorProvider implements FinderProvider {
     return doctor;
   }
 
-  findOrForbid(userId: number) {
-    const doctor = this.doctorsRepo.findOneBy({ userId });
+  async findOrForbid(userId: number) {
+    const doctor = await this.doctorsRepo.findOneBy({ userId });
 
     if (!doctor) {
       throw new ForbiddenException(ERR_MSG_DOCTOR_ACCOUNT_WAS_NOT_FOUND);
@@ -40,8 +40,8 @@ export class FindDoctorProvider implements FinderProvider {
     return doctor;
   }
 
-  findOrFail(userId: number) {
-    const doctor = this.doctorsRepo.findOneBy({ userId });
+  async findOrFail(userId: number) {
+    const doctor = await this.doctorsRepo.findOneBy({ userId });
 
     if (!doctor) {
       throw new BadRequestException(ERR_MSG_DOCTOR_WAS_NOT_FOUND);
