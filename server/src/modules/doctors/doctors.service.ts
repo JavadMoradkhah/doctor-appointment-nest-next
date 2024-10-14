@@ -86,6 +86,10 @@ export class DoctorsService {
           id: true,
           title: true,
         },
+        office: {
+          floor: true,
+          officeNumber: true,
+        },
         avatar: true,
         biography: true,
         medicalSystemNumber: true,
@@ -94,6 +98,7 @@ export class DoctorsService {
         user: true,
         specialization: true,
         degree: true,
+        office: true,
       },
     });
 
@@ -111,6 +116,7 @@ export class DoctorsService {
         user: true,
         specialization: true,
         degree: true,
+        office: true,
       },
     });
 
