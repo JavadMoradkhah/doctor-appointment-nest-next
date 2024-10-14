@@ -11,6 +11,7 @@ import { UsersModule } from 'src/modules/users/users.module';
 import { DegreesModule } from '../degrees/degrees.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { HolidaysModule } from '../holidays/holidays.module';
+import { InsurancesModule } from '../insurances/insurances.module';
 import { OfficesModule } from '../offices/offices.module';
 import { SchedulesModule } from '../schedules/schedules.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
@@ -80,6 +81,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     DoctorsModule,
     SchedulesModule,
     HolidaysModule,
+    InsurancesModule,
     OfficesModule,
   ],
   controllers: [AppController],
