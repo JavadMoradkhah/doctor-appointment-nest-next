@@ -66,7 +66,7 @@ export class SchedulesService {
     const schedule = await this.schedulesRepo.findOneBy({ id });
 
     if (!schedule) {
-      throw new BadRequestException(ERR_MSG_SCHEDULE_WAS_NOT_FOUND);
+      throw new NotFoundException();
     }
 
     if (schedule.doctorId !== userId) {
