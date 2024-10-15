@@ -3,14 +3,11 @@ import {
   ValidationArguments,
   ValidationOptions,
 } from 'class-validator';
-import {
-  parseTime,
-  TimeObj,
-  timeToSeconds,
-} from 'src/common/utils/datetime.util';
+import { Duration } from 'src/common/interfaces/duration.interface';
+import { durationToSeconds, parseTime } from 'src/common/utils/datetime.util';
 
 export function MinTime(
-  minTime: TimeObj,
+  minTime: Duration,
   validationOptions?: ValidationOptions,
 ) {
   return function (object: object, propertyName: string) {
@@ -23,9 +20,10 @@ export function MinTime(
       validator: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         validate(value: any, args: ValidationArguments) {
-          const inputTime = parseTime(value);
-          if (!inputTime) return false;
-          return timeToSeconds(inputTime) >= timeToSeconds(minTime);
+          return (
+            durationToSeconds(parseTime(value) ?? {}) >=
+            durationToSeconds(minTime)
+          );
         },
       },
     });
