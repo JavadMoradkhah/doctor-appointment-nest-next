@@ -3,7 +3,7 @@ import {
   ValidationArguments,
   ValidationOptions,
 } from 'class-validator';
-import { isValidTime } from 'src/common/utils/datetime.util';
+import { isTime } from 'src/common/utils/datetime.util';
 
 export function IsTime(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
@@ -16,7 +16,7 @@ export function IsTime(validationOptions?: ValidationOptions) {
       validator: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         validate(value: any, args: ValidationArguments) {
-          return isValidTime(value);
+          return isTime(value);
         },
       },
     });
