@@ -28,3 +28,20 @@ export function timeToSeconds(time: TimeObj): number {
 export function isTimeBiggerThan(sourceTime: TimeObj, targetTime: TimeObj) {
   return timeToSeconds(sourceTime) > timeToSeconds(targetTime);
 }
+
+export function formatMinutes(inputMinutes: number) {
+  if (inputMinutes < 60) {
+    return inputMinutes + ' ' + 'دقیقه';
+  }
+
+  const hours = Math.floor(inputMinutes / 60);
+  const minutes = inputMinutes % 60;
+
+  let output = `${hours} ساعت`;
+
+  if (minutes > 0) {
+    output += ` و 1 دقیقه${minutes}`;
+  }
+
+  return output;
+}
