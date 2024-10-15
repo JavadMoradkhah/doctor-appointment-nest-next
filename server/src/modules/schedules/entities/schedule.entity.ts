@@ -43,6 +43,9 @@ export class Schedule {
   @Column({ type: 'time without time zone', nullable: true })
   breakEndsAt: Date;
 
+  @Column({ type: 'smallint' })
+  appointmentsDuration: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
