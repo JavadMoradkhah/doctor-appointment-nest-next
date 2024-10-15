@@ -1,19 +1,14 @@
 import { REGEX_VALID_TIME } from '../constants/datetime.constants';
+import { Duration } from '../interfaces/duration.interface';
 
-export interface TimeObj {
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-export function isValidTime(time: any): boolean {
+export function isTime(time: any): boolean {
   if (typeof time !== 'string') return false;
   const matchResult = time.match(REGEX_VALID_TIME);
   return matchResult !== null && matchResult.length === 4;
 }
 
-export function parseTime(time: any): TimeObj | null {
-  if (!isValidTime(time)) return null;
+export function parseTime(time: any): Duration | null {
+  if (!isTime(time)) return null;
   const matchResult = time.match(REGEX_VALID_TIME);
   const [hours, minutes, seconds] = matchResult
     .slice(1, 4)
@@ -21,27 +16,10 @@ export function parseTime(time: any): TimeObj | null {
   return { hours, minutes, seconds };
 }
 
-export function timeToSeconds(time: TimeObj): number {
-  return time.hours * 60 * 60 + time.minutes * 60 + time.seconds;
-}
-
-export function isTimeBiggerThan(sourceTime: TimeObj, targetTime: TimeObj) {
-  return timeToSeconds(sourceTime) > timeToSeconds(targetTime);
-}
-
-export function formatMinutes(inputMinutes: number) {
-  if (inputMinutes < 60) {
-    return inputMinutes + ' ' + 'دقیقه';
-  }
-
-  const hours = Math.floor(inputMinutes / 60);
-  const minutes = inputMinutes % 60;
-
-  let output = `${hours} ساعت`;
-
-  if (minutes > 0) {
-    output += ` و 1 دقیقه${minutes}`;
-  }
-
-  return output;
+export function durationToSeconds(duration: Duration): number {
+  return (
+    (duration.hours ?? 0) * 60 * 60 +
+    (duration.minutes ?? 0) * 60 +
+    (duration.seconds ?? 0)
+  );
 }
