@@ -32,7 +32,7 @@ export class CreateScheduleDto {
   @IsString()
   @IsNotEmpty()
   @IsTime({ message: ERR_MSG_INVALID_TIME })
-  startsAt: string;
+  startsAt: Date;
 
   @IsString()
   @IsNotEmpty()
@@ -47,7 +47,7 @@ export class CreateScheduleDto {
     { hours: 12 },
     { message: ERR_MSG_SCHEDULE_MAX_DURATION },
   )
-  endsAt: string;
+  endsAt: Date;
 
   @IsString()
   @IsOptional()
