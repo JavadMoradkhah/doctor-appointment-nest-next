@@ -1,4 +1,3 @@
-import { IPostgresInterval } from 'postgres-interval';
 import { Office } from 'src/modules/offices/entities/office.entity';
 import {
   Column,
@@ -48,9 +47,6 @@ export class Doctor {
 
   @Column({ type: 'varchar', length: 1024, nullable: true })
   avatarKey?: string;
-
-  @Column({ type: 'interval' })
-  defaultAppointmentsGap: IPostgresInterval;
 
   @Column({ type: 'varchar', length: 50 })
   medicalSystemNumber: string;

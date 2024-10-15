@@ -214,9 +214,6 @@ export class DoctorsService {
 
     doctor.biography = updateDoctorDto.biography ?? doctor.biography;
 
-    doctor.defaultAppointmentsGap =
-      updateDoctorDto.defaultAppointmentsGap ?? doctor.defaultAppointmentsGap;
-
     doctor.medicalSystemNumber =
       updateDoctorDto.medicalSystemNumber ?? doctor.medicalSystemNumber;
 
