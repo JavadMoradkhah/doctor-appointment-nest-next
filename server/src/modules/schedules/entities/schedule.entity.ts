@@ -5,10 +5,12 @@ import {
   Entity,
   Index,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Appointment } from '../../../modules/appointments/entities/appointment.entity';
 import { Doctor } from '../../doctors/entities/doctor.entity';
 import { Weekday } from '../enums/weekday.enum';
 
@@ -56,4 +58,6 @@ export class Schedule {
   @DeleteDateColumn()
   deletedAt: Date;
 
+  @OneToMany(() => Appointment, (appointment) => appointment.schedule)
+  appointments: Appointment[];
 }

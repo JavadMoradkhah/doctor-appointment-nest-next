@@ -1,9 +1,10 @@
-import { IPostgresInterval } from 'postgres-interval';
+import { Schedule } from 'src/modules/schedules/entities/schedule.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
@@ -24,6 +25,12 @@ export class Appointment {
 
   @RelationId((appointment: Appointment) => appointment.doctor)
   doctorId: number;
+
+  @ManyToOne(() => Schedule, (schedule) => schedule.appointments, {
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn()
+  schedule: Schedule;
 
   @Column({ type: 'date' })
   date: Date;
