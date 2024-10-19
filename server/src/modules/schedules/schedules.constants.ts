@@ -11,6 +11,10 @@ export const Weekdays = {
 };
 
 // Error Messages
+
+export const ERR_MSG_SCHEDULE_WAS_NOT_FOUND_BY_DATE =
+  'تاریخ انتخاب شده خارج از ایام کاری می باشد';
+
 export const ERR_MSG_SCHEDULE_UNIQUENESS_VIOLATION =
   'شما قبلا این روز کاری را اضافه کرده اید';
 
