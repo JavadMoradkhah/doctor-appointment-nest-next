@@ -28,8 +28,8 @@ export class Appointment {
   @Column({ type: 'date' })
   date: Date;
 
-  @Column({ type: 'interval', nullable: true })
-  appointmentsGap: IPostgresInterval;
+  @Column({ type: 'boolean', default: true })
+  isAvailable: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
