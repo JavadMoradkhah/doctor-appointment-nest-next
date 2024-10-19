@@ -8,6 +8,7 @@ import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
 import { IamModule } from 'src/modules/iam/iam.module';
 import { UsersModule } from 'src/modules/users/users.module';
+import { DayOffsModule } from '../dayoffs/dayoffs.module';
 import { DegreesModule } from '../degrees/degrees.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { HolidaysModule } from '../holidays/holidays.module';
@@ -83,6 +84,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     HolidaysModule,
     InsurancesModule,
     OfficesModule,
+    DayOffsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
