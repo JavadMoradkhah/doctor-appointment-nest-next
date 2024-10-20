@@ -99,6 +99,7 @@ export class DoctorsService {
         specialization: true,
         degree: true,
         office: true,
+        services: true,
       },
     });
 
@@ -117,6 +118,7 @@ export class DoctorsService {
         specialization: true,
         degree: true,
         office: true,
+        services: true,
       },
     });
 
