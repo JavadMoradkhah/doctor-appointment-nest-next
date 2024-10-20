@@ -67,7 +67,7 @@ export class DoctorsService {
   }
 
   async findOne(id: number, userRole: UserRole) {
-    const doctor = this.doctorsRepo.findOne({
+    const doctor = await this.doctorsRepo.findOne({
       where: { userId: id },
       select: {
         userId: true,
