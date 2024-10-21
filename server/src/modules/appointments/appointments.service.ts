@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, DataSource, Repository } from 'typeorm';
 import { FindDoctorProvider } from '../doctors/providers/find-doctor.provider';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { PaginationService } from '../pagination/providers/pagination.service';
@@ -17,6 +17,7 @@ import { ERR_MSG_APPOINTMENT_UNIQUENESS_VIOLATION } from './appointments.constan
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
+import { CreateManyAppointmentsDto } from './dto/create-many-appointments.dto';
 
 @Injectable()
 export class AppointmentsService {
@@ -25,6 +26,7 @@ export class AppointmentsService {
     private readonly appointmentsRepo: Repository<Appointment>,
     @InjectRepository(Schedule)
     private readonly schedulesRepo: Repository<Schedule>,
+    private readonly dataSource: DataSource,
     private readonly findDoctorProvider: FindDoctorProvider,
     private readonly paginationService: PaginationService,
   ) {}
@@ -143,6 +145,47 @@ export class AppointmentsService {
     return appointment;
   }
 
+  async bulkCreate(
+    userId: number,
+    createManyAppointmentsDto: CreateManyAppointmentsDto,
+  ) {
+    await this.checkAppointmentExistsInRange(
+      userId,
+      createManyAppointmentsDto.startDate,
+      createManyAppointmentsDto.endDate,
+    );
+
+    const result = await this.dataSource.manager.query(
+      `
+      WITH inserted_rows AS (
+        INSERT INTO appointments("doctorId", "scheduleId", "date")
+        SELECT
+          $1::smallint,
+          schedules.id AS scheduleId,
+          datetime::date AS date
+        FROM generate_series(
+          $2::timestamp,
+          $3::timestamp,
+          '1 day'::interval,
+          'Asia/Tehran'
+        ) AS datetime
+        JOIN schedules
+          ON EXTRACT(DOW FROM datetime) = schedules.weekday
+        ORDER BY date
+        RETURNING id
+      )
+      SELECT count(*) AS count FROM insertedRows;  
+      `,
+      [
+        userId,
+        createManyAppointmentsDto.startDate,
+        createManyAppointmentsDto.endDate,
+      ],
+    );
+
+    return result;
+  }
+
   async update(
     id: number,
     userId: number,
@@ -181,6 +224,21 @@ export class AppointmentsService {
     const exists = await this.appointmentsRepo.existsBy({
       doctor: { userId: doctorId },
       date: date,
+    });
+
+    if (exists) {
+      throw new ConflictException(ERR_MSG_APPOINTMENT_UNIQUENESS_VIOLATION);
+    }
+  }
+
+  async checkAppointmentExistsInRange(
+    doctorId: number,
+    startDate: Date,
+    endDate: Date,
+  ) {
+    const exists = await this.appointmentsRepo.existsBy({
+      doctor: { userId: doctorId },
+      date: Between(startDate, endDate),
     });
 
     if (exists) {

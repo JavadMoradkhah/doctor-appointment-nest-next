@@ -18,6 +18,7 @@ import { UserRole } from '../users/enums/user-role.enum';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { CreateManyAppointmentsDto } from './dto/create-many-appointments.dto';
 
 @ApiTags('appointments')
 @Controller('appointments')
@@ -51,6 +52,18 @@ export class AppointmentsController {
     @Body() createAppointmentDto: CreateAppointmentDto,
   ) {
     return this.appointmentsService.create(userId, createAppointmentDto);
+  }
+
+  @Post('bulk-create')
+  @Roles(UserRole.DOCTOR)
+  bulkCreate(
+    @ActiveUser('sub') userId: number,
+    @Body() createManyAppointmentsDto: CreateManyAppointmentsDto,
+  ) {
+    return this.appointmentsService.bulkCreate(
+      userId,
+      createManyAppointmentsDto,
+    );
   }
 
   @Patch(':id')
