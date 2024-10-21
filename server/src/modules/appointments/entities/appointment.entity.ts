@@ -21,6 +21,7 @@ export class Appointment {
   @ManyToOne(() => Doctor, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'doctorId' })
   doctor: Doctor;
 
   @RelationId((appointment: Appointment) => appointment.doctor)
