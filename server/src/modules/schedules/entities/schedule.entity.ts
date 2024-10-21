@@ -28,7 +28,7 @@ export class Schedule {
   @RelationId((schedule: Schedule) => schedule.doctor)
   doctorId: number;
 
-  @Column({ type: 'enum', enum: Weekday })
+  @Column({ type: 'smallint', enum: Weekday })
   weekday: Weekday;
 
   @Column({ type: 'varchar', length: 50 })
