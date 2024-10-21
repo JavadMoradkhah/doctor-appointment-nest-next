@@ -1,5 +1,4 @@
 import {
-  isDateString,
   registerDecorator,
   ValidationArguments,
   ValidationOptions,
@@ -22,11 +21,11 @@ export function IsDateAfter(
           const [relatedPropertyName] = args.constraints;
           const relatedValue = (args.object as any)[relatedPropertyName];
 
-          if (!isDateString(value) || !isDateString(relatedValue)) {
-            return false;
-          }
-
-          return new Date(value).getTime() > new Date(relatedValue).getTime();
+          return (
+            value instanceof Date &&
+            relatedValue instanceof Date &&
+            value.getTime() > relatedValue.getTime()
+          );
         },
       },
     });
