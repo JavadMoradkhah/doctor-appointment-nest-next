@@ -1,3 +1,4 @@
+import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
 import { Schedule } from 'src/modules/schedules/entities/schedule.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   RelationId,
   UpdateDateColumn,
@@ -44,4 +46,7 @@ export class Appointment {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Reservation, (reservation) => reservation.appointment)
+  reservations: Reservation[];
 }
