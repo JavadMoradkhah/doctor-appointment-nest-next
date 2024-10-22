@@ -8,8 +8,10 @@ import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
 import { IamModule } from 'src/modules/iam/iam.module';
 import { UsersModule } from 'src/modules/users/users.module';
+import { AppointmentsModule } from '../appointments/appointments.module';
 import { DayOffsModule } from '../dayoffs/dayoffs.module';
 import { DegreesModule } from '../degrees/degrees.module';
+import { DoctorsBlacklistModule } from '../doctors-blacklist/doctors-blacklist.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { HolidaysModule } from '../holidays/holidays.module';
 import { InsurancesModule } from '../insurances/insurances.module';
@@ -19,7 +21,6 @@ import { ServicesModule } from '../services/services.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AppointmentsModule } from '../appointments/appointments.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
@@ -77,8 +78,8 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     //     ),
     //   }),
     // }),
-    UsersModule,
     IamModule,
+    UsersModule,
     SpecializationsModule,
     DegreesModule,
     DoctorsModule,
@@ -89,6 +90,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     OfficesModule,
     DayOffsModule,
     AppointmentsModule,
+    DoctorsBlacklistModule,
   ],
   controllers: [AppController],
   providers: [AppService],
