@@ -1,5 +1,3 @@
-import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
-import { Schedule } from 'src/modules/schedules/entities/schedule.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,6 +10,9 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Reservation } from '../../../modules/reservations/entities/reservation.entity';
+import { Schedule } from '../../../modules/schedules/entities/schedule.entity';
+import { TimeSlot } from '../../../modules/time-slots/entities/time-slot.entity';
 import { Doctor } from '../../doctors/entities/doctor.entity';
 
 @Entity('appointments')
@@ -52,4 +53,7 @@ export class Appointment {
 
   @OneToMany(() => Reservation, (reservation) => reservation.appointment)
   reservations: Reservation[];
+
+  @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.appointment)
+  timeSlots: TimeSlot[];
 }

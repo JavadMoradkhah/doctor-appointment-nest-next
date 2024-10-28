@@ -19,6 +19,7 @@ import { ReservationsModule } from '../reservations/reservations.module';
 import { SchedulesModule } from '../schedules/schedules.module';
 import { ServicesModule } from '../services/services.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
+import { TimeSlotsModule } from '../time-slots/time-slots.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -89,6 +90,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     OfficesModule,
     DayOffsModule,
     AppointmentsModule,
+    TimeSlotsModule,
     DoctorsBlacklistModule,
     ReservationsModule,
   ],
