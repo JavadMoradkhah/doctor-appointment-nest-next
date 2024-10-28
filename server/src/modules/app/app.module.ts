@@ -13,7 +13,6 @@ import { DayOffsModule } from '../dayoffs/dayoffs.module';
 import { DegreesModule } from '../degrees/degrees.module';
 import { DoctorsBlacklistModule } from '../doctors-blacklist/doctors-blacklist.module';
 import { DoctorsModule } from '../doctors/doctors.module';
-import { HolidaysModule } from '../holidays/holidays.module';
 import { InsurancesModule } from '../insurances/insurances.module';
 import { OfficesModule } from '../offices/offices.module';
 import { SchedulesModule } from '../schedules/schedules.module';
@@ -85,7 +84,6 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     DoctorsModule,
     ServicesModule,
     SchedulesModule,
-    HolidaysModule,
     InsurancesModule,
     OfficesModule,
     DayOffsModule,
