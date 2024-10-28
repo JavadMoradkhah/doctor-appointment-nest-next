@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
@@ -15,6 +16,10 @@ import { ulid } from 'ulid';
 import { ReservationStatus } from '../enums/reservation-status.enum';
 
 @Entity('reservations')
+@Index(['patient', 'appointment', 'time'], {
+  unique: true,
+  where: `status = '${ReservationStatus.BOOKED}'`,
+})
 export class Reservation {
   @PrimaryColumn({ type: 'varchar', length: 26 })
   id: string;
@@ -37,18 +42,15 @@ export class Reservation {
   @RelationId((reservation: Reservation) => reservation.appointment)
   appointmentId: number;
 
+  @Column({ type: 'time without time zone' })
+  time: string;
+
   @Column({
     type: 'enum',
     enum: ReservationStatus,
     default: ReservationStatus.BOOKED,
   })
   status: ReservationStatus;
-
-  @Column({ type: 'time without time zone' })
-  startsAt: string;
-
-  @Column({ type: 'time without time zone' })
-  endsAt: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   reason: string;
