@@ -32,8 +32,11 @@ export class Appointment {
   @ManyToOne(() => Schedule, (schedule) => schedule.appointments, {
     onDelete: 'RESTRICT',
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'scheduleId' })
   schedule: Schedule;
+
+  @RelationId((appointment: Appointment) => appointment.schedule)
+  scheduleId: number;
 
   @Column({ type: 'date' })
   date: Date;
