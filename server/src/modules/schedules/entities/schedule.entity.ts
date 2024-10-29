@@ -35,10 +35,10 @@ export class Schedule {
   dayName: string;
 
   @Column({ type: 'time without time zone' })
-  startsAt: Date;
+  startsAt: string;
 
   @Column({ type: 'time without time zone' })
-  endsAt: Date;
+  endsAt: string;
 
   @Column({ type: 'time without time zone', nullable: true })
   breakStartsAt: Date;
