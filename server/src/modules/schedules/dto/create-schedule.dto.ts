@@ -32,7 +32,7 @@ export class CreateScheduleDto {
   @IsString()
   @IsNotEmpty()
   @IsTime({ message: ERR_MSG_INVALID_TIME })
-  startsAt: Date;
+  startsAt: string;
 
   @IsString()
   @IsNotEmpty()
@@ -47,7 +47,7 @@ export class CreateScheduleDto {
     { hours: 12 },
     { message: ERR_MSG_SCHEDULE_MAX_DURATION },
   )
-  endsAt: Date;
+  endsAt: string;
 
   @IsString()
   @IsOptional()
@@ -57,7 +57,7 @@ export class CreateScheduleDto {
     { hours: 1 },
     { message: ERR_MSG_SCHEDULE_BREAK_START_MIN_DIFF_WITH_START_TIME },
   )
-  breakStartsAt: Date;
+  breakStartsAt: string;
 
   @IsString()
   @ValidateIf((schedule: CreateScheduleDto) => !!schedule.breakStartsAt)
@@ -75,7 +75,7 @@ export class CreateScheduleDto {
     { hours: 4 },
     { message: ERR_MSG_SCHEDULE_BREAK_TIME_MAX_DURATION },
   )
-  breakEndsAt: Date;
+  breakEndsAt: string;
 
   @IsNumber()
   @IsInt()
