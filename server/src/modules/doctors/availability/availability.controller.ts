@@ -7,7 +7,7 @@ import { AvailabilityService } from './availability.service';
 
 @Roles(UserRole.PATIENT)
 @ApiTags('availability')
-@Controller(':doctorId/availability')
+@Controller('doctors/:doctorId/availability')
 export class AvailabilityController {
   constructor(private readonly availabilityService: AvailabilityService) {}
 
