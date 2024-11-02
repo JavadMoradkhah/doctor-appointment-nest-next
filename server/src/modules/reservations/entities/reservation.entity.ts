@@ -4,6 +4,7 @@ import {
   BeforeInsert,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -60,6 +61,9 @@ export class Reservation {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @BeforeInsert()
   beforeInsertActions() {
