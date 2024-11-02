@@ -38,19 +38,27 @@ export class AvailabilityService {
   async findTimes(doctorId: number, date: Date) {
     const timeSlots = await this.dataSource.manager.query(
       `
-      SELECT time::time, "appointments"."isAvailable"
-      FROM "appointments"
-      LEFT JOIN "schedules"
-        ON "schedules"."id" = "appointments"."scheduleId"
-      JOIN generate_series(
-        "appointments"."date"::date + "schedules"."startsAt"::time,
-        "appointments"."date"::date + "schedules"."endsAt"::time,
-        concat("schedules"."appointmentsDuration"::smallint, ' minutes')::interval
-      ) AS gs(time) ON TRUE
-      WHERE
-        "appointments"."doctorId" = $1
-        AND "appointments"."date" = $2
-        AND (time::time < "schedules"."breakStartsAt" OR time::time >= "schedules"."breakEndsAt")
+        SELECT
+            gs."startTime"::time,
+            (gs."startTime" + make_interval(mins => "schedules"."appointmentsDuration"::smallint))::time AS "endTime",
+            "appointments"."isAvailable"
+        FROM "appointments"
+        LEFT JOIN "schedules"
+            ON "schedules"."id" = "appointments"."scheduleId"
+        JOIN generate_series(
+            "appointments"."date"::timestamp + "schedules"."startsAt"::time,
+            "appointments"."date"::timestamp + "schedules"."endsAt"::time - make_interval(mins => "schedules"."appointmentsDuration"::smallint),
+            make_interval(mins => "schedules"."appointmentsDuration"::smallint)
+        ) AS gs("startTime")
+        ON TRUE
+        WHERE
+            "appointments"."doctorId" = $1
+            AND "appointments"."date" = $2
+            AND (
+            gs."startTime"::time < COALESCE("schedules"."breakStartsAt", '24:00'::time) 
+            OR 
+            gs."startTime"::time >= COALESCE("schedules"."breakEndsAt", '00:00'::time)
+        );
     `,
       [doctorId, date],
     );
