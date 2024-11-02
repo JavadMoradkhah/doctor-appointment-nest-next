@@ -17,7 +17,7 @@ import { ulid } from 'ulid';
 import { ReservationStatus } from '../enums/reservation-status.enum';
 
 @Entity('reservations')
-@Index(['patient', 'appointment', 'time'], {
+@Index(['patient', 'appointment', 'startTime', 'endTime'], {
   unique: true,
   where: `status = '${ReservationStatus.BOOKED}'`,
 })
@@ -44,7 +44,10 @@ export class Reservation {
   appointmentId: number;
 
   @Column({ type: 'time without time zone' })
-  time: string;
+  startTime: string;
+
+  @Column({ type: 'time without time zone' })
+  endTime: string;
 
   @Column({
     type: 'enum',
