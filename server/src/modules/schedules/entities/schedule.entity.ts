@@ -41,10 +41,10 @@ export class Schedule {
   endsAt: string;
 
   @Column({ type: 'time without time zone', nullable: true })
-  breakStartsAt: Date;
+  breakStartsAt: string;
 
   @Column({ type: 'time without time zone', nullable: true })
-  breakEndsAt: Date;
+  breakEndsAt: string;
 
   @Column({ type: 'smallint' })
   appointmentsDuration: number;
