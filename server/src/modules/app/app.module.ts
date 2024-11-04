@@ -15,8 +15,6 @@ import { DoctorsBlacklistModule } from '../doctors-blacklist/doctors-blacklist.m
 import { DoctorsModule } from '../doctors/doctors.module';
 import { InsurancesModule } from '../insurances/insurances.module';
 import { OfficesModule } from '../offices/offices.module';
-import { ReservationsModule } from '../reservations/reservations.module';
-import { SchedulesModule } from '../schedules/schedules.module';
 import { ServicesModule } from '../services/services.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
 import { TimeSlotsModule } from '../time-slots/time-slots.module';
@@ -85,14 +83,12 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     DegreesModule,
     DoctorsModule,
     ServicesModule,
-    SchedulesModule,
     InsurancesModule,
     OfficesModule,
     DayOffsModule,
     AppointmentsModule,
     TimeSlotsModule,
     DoctorsBlacklistModule,
-    ReservationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
