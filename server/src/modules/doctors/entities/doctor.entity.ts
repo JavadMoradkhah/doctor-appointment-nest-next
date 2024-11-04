@@ -1,4 +1,3 @@
-import { Office } from 'src/modules/offices/entities/office.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,8 +10,9 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Office } from '../../../modules/offices/entities/office.entity';
+import { WorkingDay } from '../../../modules/working-days/entities/working-day.entity';
 import { Degree } from '../../degrees/entities/degree.entity';
-import { Schedule } from '../../schedules/entities/schedule.entity';
 import { Service } from '../../services/entities/service.entity';
 import { Specialization } from '../../specializations/entities/specialization.entity';
 import { User } from '../../users/entities/user.entity';
@@ -61,8 +61,8 @@ export class Doctor {
   @OneToMany(() => Service, (service) => service.doctor)
   services: Service[];
 
-  @OneToMany(() => Schedule, (schedule) => schedule.doctor)
-  schedules: Schedule[];
+  @OneToMany(() => WorkingDay, (workingDay) => workingDay.doctor)
+  workingDays: WorkingDay[];
 
   @OneToOne(() => Office, (office) => office.doctor)
   office: Office;

@@ -13,46 +13,46 @@ import { ApiTags } from '@nestjs/swagger';
 import { ActiveUser } from '../iam/authentication/decorators/active-user.decorator';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { UserRole } from '../users/enums/user-role.enum';
-import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { SchedulesService } from './schedules.service';
+import { CreateWorkingDayDto } from './dto/create-working-day.dto';
+import { UpdateWorkingDayDto } from './dto/update-working-day.dto';
+import { WorkingDaysService } from './working-days.service';
 
 @Roles(UserRole.DOCTOR)
-@ApiTags('schedules')
-@Controller('schedules')
-export class SchedulesController {
-  constructor(private readonly schedulesService: SchedulesService) {}
+@ApiTags('Working Days')
+@Controller('working_days')
+export class WorkingDaysController {
+  constructor(private readonly workingDaysService: WorkingDaysService) {}
 
   @Get()
   findAll(@ActiveUser('sub') userId: number) {
-    return this.schedulesService.findAll(userId);
+    return this.workingDaysService.findAll(userId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: number, @ActiveUser('sub') userId: number) {
-    return this.schedulesService.findOne(id, userId);
+    return this.workingDaysService.findOne(id, userId);
   }
 
   @Post()
   create(
     @ActiveUser('sub') userId: number,
-    @Body() createScheduleDto: CreateScheduleDto,
+    @Body() createWorkingDayDto: CreateWorkingDayDto,
   ) {
-    return this.schedulesService.create(userId, createScheduleDto);
+    return this.workingDaysService.create(userId, createWorkingDayDto);
   }
 
   @Put(':id')
   update(
     @Param('id') id: number,
     @ActiveUser('sub') userId: number,
-    @Body() updateScheduleDto: UpdateScheduleDto,
+    @Body() updateWorkingDayDto: UpdateWorkingDayDto,
   ) {
-    return this.schedulesService.update(id, userId, updateScheduleDto);
+    return this.workingDaysService.update(id, userId, updateWorkingDayDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: number, @ActiveUser('sub') userId: number) {
-    return this.schedulesService.remove(id, userId);
+    return this.workingDaysService.remove(id, userId);
   }
 }

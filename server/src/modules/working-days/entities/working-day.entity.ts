@@ -3,29 +3,27 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  Index,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   RelationId,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { Appointment } from '../../../modules/appointments/entities/appointment.entity';
 import { Doctor } from '../../doctors/entities/doctor.entity';
 import { Weekday } from '../enums/weekday.enum';
 
-@Entity('schedules')
-@Index(['doctor', 'weekday'], { unique: true })
-export class Schedule {
+@Entity('working_days')
+@Unique(['doctor', 'weekday'])
+export class WorkingDay {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => Doctor, (doctor) => doctor.schedules, {
+  @ManyToOne(() => Doctor, (doctor) => doctor.workingDays, {
     onDelete: 'CASCADE',
   })
   doctor: Doctor;
 
-  @RelationId((schedule: Schedule) => schedule.doctor)
+  @RelationId((workingDay: WorkingDay) => workingDay.doctor)
   doctorId: number;
 
   @Column({ type: 'smallint', enum: Weekday })
@@ -46,9 +44,6 @@ export class Schedule {
   @Column({ type: 'time without time zone', nullable: true })
   breakEndsAt: string;
 
-  @Column({ type: 'smallint' })
-  appointmentsDuration: number;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -57,7 +52,4 @@ export class Schedule {
 
   @DeleteDateColumn()
   deletedAt: Date;
-
-  @OneToMany(() => Appointment, (appointment) => appointment.schedule)
-  appointments: Appointment[];
 }
