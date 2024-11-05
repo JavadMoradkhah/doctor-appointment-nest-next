@@ -8,7 +8,6 @@ import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
 import { IamModule } from 'src/modules/iam/iam.module';
 import { UsersModule } from 'src/modules/users/users.module';
-import { AppointmentsModule } from '../appointments/appointments.module';
 import { DayOffsModule } from '../dayoffs/dayoffs.module';
 import { DegreesModule } from '../degrees/degrees.module';
 import { DoctorsBlacklistModule } from '../doctors-blacklist/doctors-blacklist.module';
@@ -86,8 +85,6 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     InsurancesModule,
     OfficesModule,
     DayOffsModule,
-    AppointmentsModule,
-    TimeSlotsModule,
     DoctorsBlacklistModule,
     WorkingDaysModule,
   ],
