@@ -17,7 +17,7 @@ import { InsurancesModule } from '../insurances/insurances.module';
 import { OfficesModule } from '../offices/offices.module';
 import { ServicesModule } from '../services/services.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
-import { TimeSlotsModule } from '../time-slots/time-slots.module';
+import { WorkingDaysModule } from '../working-days/working-days.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -89,6 +89,7 @@ const ENV_FILE = !NODE_ENV ? '.env.dev' : `.env.${NODE_ENV}`;
     AppointmentsModule,
     TimeSlotsModule,
     DoctorsBlacklistModule,
+    WorkingDaysModule,
   ],
   controllers: [AppController],
   providers: [AppService],
