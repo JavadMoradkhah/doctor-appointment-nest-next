@@ -7,6 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Doctor } from '../../doctors/entities/doctor.entity';
+import { Expose } from 'class-transformer';
+import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 
 @Entity('services')
 @Index(['doctor', 'title'], { unique: true })
@@ -23,5 +25,6 @@ export class Service {
   title: string;
 
   @CreateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   createdAt: Date;
 }

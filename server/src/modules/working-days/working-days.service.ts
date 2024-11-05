@@ -7,6 +7,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FindDoctorProvider } from '../doctors/providers/find-doctor.provider';
+import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
+import { PaginationService } from '../pagination/providers/pagination.service';
 import { CreateWorkingDayDto } from './dto/create-working-day.dto';
 import { UpdateWorkingDayDto } from './dto/update-working-day.dto';
 import { WorkingDay } from './entities/working-day.entity';
@@ -22,15 +24,50 @@ export class WorkingDaysService {
     @InjectRepository(WorkingDay)
     private readonly workingDaysRepo: Repository<WorkingDay>,
     private readonly findDoctorProvider: FindDoctorProvider,
+    private readonly paginationService: PaginationService,
   ) {}
 
-  async findAll(userId: number) {
-    const workingDays = await this.workingDaysRepo.find({
-      where: { doctor: { userId } },
+  async findAll(
+    isAdmin: boolean,
+    userId: number,
+    paginationQueryDto: PaginationQueryDto,
+  ) {
+    const [workingDays, count] = await this.workingDaysRepo.findAndCount({
+      select: {
+        id: true,
+        weekday: true,
+        dayName: true,
+        startsAt: true,
+        endsAt: true,
+        breakStartsAt: true,
+        breakEndsAt: true,
+        createdAt: true,
+        updatedAt: true,
+        deletedAt: true,
+        doctor: {
+          userId: true,
+          avatar: true,
+          user: {
+            firstName: true,
+            lastName: true,
+            phone: true,
+          },
+        },
+      },
+      relations: {
+        doctor: {
+          user: true,
+        },
+      },
+      ...(!isAdmin && { where: { doctor: { userId } } }),
       order: { weekday: 'ASC' },
     });
 
-    return workingDays;
+    return this.paginationService.paginate(
+      paginationQueryDto,
+      workingDays,
+      count,
+    );
   }
 
   async findOne(id: number, userId: number) {

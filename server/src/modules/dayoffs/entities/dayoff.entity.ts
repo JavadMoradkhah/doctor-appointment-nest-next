@@ -1,3 +1,5 @@
+import { Expose } from 'class-transformer';
+import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 import { Doctor } from 'src/modules/doctors/entities/doctor.entity';
 import {
   Column,
@@ -19,6 +21,7 @@ export class DayOff {
   @ManyToOne(() => Doctor, {
     onDelete: 'CASCADE',
   })
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   doctor: Doctor;
 
   @RelationId((dayOff: DayOff) => dayOff.doctor)
@@ -34,8 +37,10 @@ export class DayOff {
   description: string;
 
   @CreateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   updatedAt: Date;
 }

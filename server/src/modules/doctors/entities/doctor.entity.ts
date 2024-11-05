@@ -16,6 +16,8 @@ import { Degree } from '../../degrees/entities/degree.entity';
 import { Service } from '../../services/entities/service.entity';
 import { Specialization } from '../../specializations/entities/specialization.entity';
 import { User } from '../../users/entities/user.entity';
+import { Exclude, Expose } from 'class-transformer';
+import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 
 @Entity('doctors')
 export class Doctor {
@@ -46,6 +48,7 @@ export class Doctor {
   @Column({ type: 'varchar', length: 1024, nullable: true })
   avatar?: string;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 1024, nullable: true })
   avatarKey?: string;
 
@@ -53,9 +56,11 @@ export class Doctor {
   medicalSystemNumber: string;
 
   @CreateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   updatedAt: Date;
 
   @OneToMany(() => Service, (service) => service.doctor)

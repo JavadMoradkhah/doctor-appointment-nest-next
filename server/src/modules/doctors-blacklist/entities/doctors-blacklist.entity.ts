@@ -1,3 +1,5 @@
+import { Expose } from 'class-transformer';
+import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 import { Doctor } from 'src/modules/doctors/entities/doctor.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import {
@@ -22,6 +24,7 @@ export class DoctorsBlacklist {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'doctorId' })
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   doctor: Doctor;
 
   @RelationId((doctorsBlackList: DoctorsBlacklist) => doctorsBlackList.doctor)
@@ -43,8 +46,10 @@ export class DoctorsBlacklist {
   expiresAt: Date;
 
   @CreateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   updatedAt: Date;
 }

@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ActiveUser } from 'src/modules/iam/authentication/decorators/active-user.decorator';
@@ -17,6 +18,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';
+import { RoleBasedSerializerInterceptor } from 'src/common/interceptors/role-based-serializer.interceptor';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -26,6 +28,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   findAll(@Query() paginationQuery: PaginationQueryDto) {
     return this.usersService.findAll(paginationQuery);
   }
@@ -37,6 +40,7 @@ export class UsersController {
 
   @Roles()
   @Get('me')
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   getMe(@ActiveUser('sub') id: number) {
     return this.usersService.findOne(id);
   }
@@ -51,6 +55,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
   }

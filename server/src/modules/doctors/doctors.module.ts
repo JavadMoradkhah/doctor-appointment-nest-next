@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Appointment } from '../appointments/entities/appointment.entity';
 import { DegreesModule } from '../degrees/degrees.module';
 import { PaginationModule } from '../pagination/pagination.module';
 import { SpecializationsModule } from '../specializations/specializations.module';
@@ -15,7 +14,7 @@ import { FindDoctorProvider } from './providers/find-doctor.provider';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Doctor, Appointment]),
+    TypeOrmModule.forFeature([Doctor]),
     UsersModule,
     UploadModule,
     PaginationModule,

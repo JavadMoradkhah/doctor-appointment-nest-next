@@ -9,7 +9,6 @@ import { Repository } from 'typeorm';
 import { FindDoctorProvider } from '../doctors/providers/find-doctor.provider';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { PaginationService } from '../pagination/providers/pagination.service';
-import { UserRole } from '../users/enums/user-role.enum';
 import { FindPatientProvider } from '../users/providers/find-patient-provider';
 import { ERR_MSG_DOCTORS_BLACKLIST_PATIENT_UNIQUENESS_VIOLATION } from './doctors-blacklist.constants';
 import { CreateDoctorsBlacklistDto } from './dto/create-doctors-blacklist.dto';
@@ -26,14 +25,14 @@ export class DoctorsBlacklistService {
     private readonly findPatientProvider: FindPatientProvider,
   ) {}
 
-  async findOr404(id: number, userId: number, userRole: UserRole) {
+  async findOr404(id: number, userId: number, isAdmin: boolean) {
     const entity = await this.doctorsBlacklistRepo.findOneBy({ id });
 
     if (!entity) {
       throw new NotFoundException();
     }
 
-    if (userRole !== UserRole.ADMIN && entity.doctorId !== userId) {
+    if (!isAdmin && entity.doctorId !== userId) {
       throw new ForbiddenException();
     }
 
@@ -55,11 +54,9 @@ export class DoctorsBlacklistService {
 
   async findAll(
     userId: number,
-    userRole: UserRole,
+    isAdmin: boolean,
     paginationQueryDto: PaginationQueryDto,
   ) {
-    const isAdmin = userRole === UserRole.ADMIN;
-
     const [entities, count] = await this.doctorsBlacklistRepo.findAndCount({
       select: {
         id: true,
@@ -69,14 +66,14 @@ export class DoctorsBlacklistService {
             id: true,
             firstName: true,
             lastName: true,
-            ...(isAdmin && { phone: true }),
+            phone: true,
           },
         },
         patient: {
           id: true,
           firstName: true,
           lastName: true,
-          ...(isAdmin && { phone: true }),
+          phone: true,
         },
         expiresAt: true,
         notes: true,
@@ -102,9 +99,7 @@ export class DoctorsBlacklistService {
     return this.paginationService.paginate(paginationQueryDto, entities, count);
   }
 
-  async findOne(id: number, userId: number, userRole: UserRole) {
-    const isAdmin = userRole === UserRole.ADMIN;
-
+  async findOne(id: number, userId: number, isAdmin: boolean) {
     const entity = await this.doctorsBlacklistRepo.findOne({
       select: {
         id: true,
@@ -114,14 +109,14 @@ export class DoctorsBlacklistService {
             id: true,
             firstName: true,
             lastName: true,
-            ...(isAdmin && { phone: true }),
+            phone: true,
           },
         },
         patient: {
           id: true,
           firstName: true,
           lastName: true,
-          ...(isAdmin && { phone: true }),
+          phone: true,
         },
         expiresAt: true,
         notes: true,
@@ -143,7 +138,7 @@ export class DoctorsBlacklistService {
       throw new NotFoundException();
     }
 
-    if (userRole !== UserRole.ADMIN && entity.doctor.user.id !== userId) {
+    if (!isAdmin && entity.doctor.user.id !== userId) {
       throw new ForbiddenException();
     }
 
@@ -182,17 +177,17 @@ export class DoctorsBlacklistService {
   async update(
     id: number,
     userId: number,
-    userRole: UserRole,
+    isAdmin: boolean,
     updateDoctorsBlacklistDto: UpdateDoctorsBlacklistDto,
   ) {
-    const entity = await this.findOr404(id, userId, userRole);
+    const entity = await this.findOr404(id, userId, isAdmin);
     entity.notes = updateDoctorsBlacklistDto.notes ?? entity.notes;
     entity.expiresAt = updateDoctorsBlacklistDto.expiresAt ?? entity.expiresAt;
     return await this.doctorsBlacklistRepo.save(entity);
   }
 
-  async remove(id: number, userId: number, userRole: UserRole) {
-    const entity = await this.findOr404(id, userId, userRole);
+  async remove(id: number, userId: number, isAdmin: boolean) {
+    const entity = await this.findOr404(id, userId, isAdmin);
     await this.doctorsBlacklistRepo.remove(entity);
   }
 }

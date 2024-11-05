@@ -1,8 +1,11 @@
+import { Expose } from 'class-transformer';
+import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
@@ -21,6 +24,8 @@ export class WorkingDay {
   @ManyToOne(() => Doctor, (doctor) => doctor.workingDays, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'doctorId' })
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   doctor: Doctor;
 
   @RelationId((workingDay: WorkingDay) => workingDay.doctor)
@@ -45,11 +50,14 @@ export class WorkingDay {
   breakEndsAt: string;
 
   @CreateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   updatedAt: Date;
 
   @DeleteDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   deletedAt: Date;
 }

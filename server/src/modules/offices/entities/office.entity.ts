@@ -1,3 +1,5 @@
+import { Expose } from 'class-transformer';
+import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 import { Doctor } from 'src/modules/doctors/entities/doctor.entity';
 import {
   Column,
@@ -30,5 +32,6 @@ export class Office {
   floor: number;
 
   @CreateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   createdAt: Date;
 }

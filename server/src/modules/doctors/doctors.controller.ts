@@ -22,6 +22,7 @@ import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { UserRole } from '../users/enums/user-role.enum';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { RoleBasedSerializerInterceptor } from 'src/common/interceptors/role-based-serializer.interceptor';
 
 @ApiTags('doctors')
 @Controller('doctors')
@@ -30,6 +31,7 @@ export class DoctorsController {
 
   @Get()
   @Roles()
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   findAll(
     @Query() paginationQueryDto: PaginationQueryDto,
     @ActiveUser('role') userRole: UserRole,
@@ -39,12 +41,14 @@ export class DoctorsController {
 
   @Get('me')
   @Roles(UserRole.DOCTOR)
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   me(@ActiveUser('sub') id: number) {
     return this.doctorsService.me(id);
   }
 
   @Get(':id')
   @Roles()
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   findOne(@Param('id') id: number, @ActiveUser('role') userRole: UserRole) {
     return this.doctorsService.findOne(id, userRole);
   }

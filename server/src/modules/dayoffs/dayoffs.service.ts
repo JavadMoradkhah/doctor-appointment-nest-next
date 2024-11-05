@@ -5,14 +5,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { PaginationService } from '../pagination/providers/pagination.service';
+import { UserRole } from '../users/enums/user-role.enum';
 import { ERR_MSG_DAY_OFF_UNIQUENESS_VIOLATION } from './dayoff.constants';
 import { CreateDayOffDto } from './dto/create-dayoff.dto';
 import { UpdateDayOffDto } from './dto/update-dayoff.dto';
 import { DayOff } from './entities/dayoff.entity';
-import { UserRole } from '../users/enums/user-role.enum';
 
 @Injectable()
 export class DayOffsService {
@@ -20,43 +20,36 @@ export class DayOffsService {
     @InjectRepository(DayOff)
     private readonly dayOffsRepo: Repository<DayOff>,
     private readonly paginationService: PaginationService,
-    private dataSource: DataSource,
   ) {}
 
   async findAll(
     userId: number,
-    userRole: UserRole,
+    isAdmin: boolean,
     paginationQueryDto: PaginationQueryDto,
   ) {
-    const isAdmin = userRole === UserRole.ADMIN;
-
     const [dayOffs, count] = await this.dayOffsRepo.findAndCount({
       select: {
         id: true,
         startDate: true,
         endDate: true,
         description: true,
-        ...(isAdmin && {
-          doctor: {
-            user: {
-              firstName: true,
-              lastName: true,
-              phone: true,
-            },
-            avatar: true,
+        doctor: {
+          user: {
+            firstName: true,
+            lastName: true,
+            phone: true,
           },
-          createdAt: true,
-          updatedAt: true,
-        }),
-      },
-      ...(isAdmin && {
-        relations: {
-          doctor: {
-            user: true,
-          },
+          avatar: true,
         },
-      }),
-      ...(userRole === UserRole.DOCTOR && {
+        createdAt: true,
+        updatedAt: true,
+      },
+      relations: {
+        doctor: {
+          user: true,
+        },
+      },
+      ...(!isAdmin && {
         where: {
           doctor: { userId },
         },
@@ -100,8 +93,6 @@ export class DayOffsService {
     if (!dayOff) {
       throw new NotFoundException();
     }
-
-    console.log({ userId: userId, doctorId: dayOff.doctorId });
 
     if (userRole !== UserRole.ADMIN && dayOff.doctor.userId !== userId) {
       throw new ForbiddenException();

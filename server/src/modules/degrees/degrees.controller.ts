@@ -8,8 +8,10 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { RoleBasedSerializerInterceptor } from 'src/common/interceptors/role-based-serializer.interceptor';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { UserRole } from '../users/enums/user-role.enum';
 import { DegreesService } from './degrees.service';
@@ -25,12 +27,14 @@ export class DegreesController {
 
   @Get()
   @Roles()
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   findAll() {
     return this.degreesService.findAll();
   }
 
   @Get(':id')
   @Roles()
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   findOne(@Param('id') id: number) {
     return this.degreesService.findOne(id);
   }

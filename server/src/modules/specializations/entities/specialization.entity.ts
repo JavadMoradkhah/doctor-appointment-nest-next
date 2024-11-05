@@ -1,3 +1,5 @@
+import { Expose } from 'class-transformer';
+import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 import {
   Column,
   CreateDateColumn,
@@ -17,5 +19,6 @@ export class Specialization {
   slug: string;
 
   @CreateDateColumn()
+  @Expose({ groups: [SerializerGroup.ADMIN] })
   createdAt: Date;
 }

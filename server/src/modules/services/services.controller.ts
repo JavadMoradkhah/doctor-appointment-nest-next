@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ActiveUser } from '../iam/authentication/decorators/active-user.decorator';
@@ -16,6 +17,7 @@ import { UserRole } from '../users/enums/user-role.enum';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { ServicesService } from './services.service';
+import { RoleBasedSerializerInterceptor } from 'src/common/interceptors/role-based-serializer.interceptor';
 
 @Roles(UserRole.DOCTOR)
 @ApiTags('services')
@@ -32,6 +34,7 @@ export class ServicesController {
   }
 
   @Get(':id')
+  @UseInterceptors(RoleBasedSerializerInterceptor)
   findOne(@ActiveUser('sub') userId: number, @Param('id') id: number) {
     return this.servicesService.findOne(id, userId);
   }
