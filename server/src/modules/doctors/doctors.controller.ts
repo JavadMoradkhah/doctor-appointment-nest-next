@@ -12,17 +12,17 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ActiveUser } from '../iam/authentication/decorators/active-user.decorator';
-import { DoctorsService } from './doctors.service';
-import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { RoleBasedSerializerInterceptor } from 'src/common/interceptors/role-based-serializer.interceptor';
 import { ParseImageFilePipe } from 'src/common/pipes/parse-image-file.pipe';
+import { ActiveUser } from '../iam/authentication/decorators/active-user.decorator';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { PaginationQueryDto } from '../pagination/dtos/pagination-query.dto';
 import { UserRole } from '../users/enums/user-role.enum';
+import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
-import { RoleBasedSerializerInterceptor } from 'src/common/interceptors/role-based-serializer.interceptor';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @ApiTags('doctors')
 @Controller('doctors')
@@ -32,11 +32,8 @@ export class DoctorsController {
   @Get()
   @Roles()
   @UseInterceptors(RoleBasedSerializerInterceptor)
-  findAll(
-    @Query() paginationQueryDto: PaginationQueryDto,
-    @ActiveUser('role') userRole: UserRole,
-  ) {
-    return this.doctorsService.findAll(paginationQueryDto, userRole);
+  findAll(@Query() paginationQueryDto: PaginationQueryDto) {
+    return this.doctorsService.findAll(paginationQueryDto);
   }
 
   @Get('me')
@@ -49,8 +46,8 @@ export class DoctorsController {
   @Get(':id')
   @Roles()
   @UseInterceptors(RoleBasedSerializerInterceptor)
-  findOne(@Param('id') id: number, @ActiveUser('role') userRole: UserRole) {
-    return this.doctorsService.findOne(id, userRole);
+  findOne(@Param('id') id: number) {
+    return this.doctorsService.findOne(id);
   }
 
   @Post()

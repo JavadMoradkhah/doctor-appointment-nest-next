@@ -34,7 +34,7 @@ export class DoctorsService {
     private readonly degreesService: DegreesService,
   ) {}
 
-  async findAll(paginationQuery: PaginationQueryDto, userRole: UserRole) {
+  async findAll(paginationQuery: PaginationQueryDto) {
     const [doctors, count] = await this.doctorsRepo.findAndCount({
       select: {
         userId: true,
@@ -42,7 +42,7 @@ export class DoctorsService {
         user: {
           firstName: true,
           lastName: true,
-          ...(userRole === UserRole.ADMIN && { phone: true }),
+          phone: true,
         },
         specialization: {
           id: true,
@@ -66,7 +66,7 @@ export class DoctorsService {
     return this.paginationService.paginate(paginationQuery, doctors, count);
   }
 
-  async findOne(id: number, userRole: UserRole) {
+  async findOne(id: number) {
     const doctor = await this.doctorsRepo.findOne({
       where: { userId: id },
       select: {
@@ -74,7 +74,7 @@ export class DoctorsService {
         user: {
           firstName: true,
           lastName: true,
-          ...(userRole === UserRole.ADMIN && { phone: true }),
+          phone: true,
           gender: true,
         },
         specialization: {
