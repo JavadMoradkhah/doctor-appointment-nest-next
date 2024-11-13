@@ -24,14 +24,21 @@ export function MinDateDiff(
       options: validationOptions,
       validator: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        validate(date: unknown, args: ValidationArguments) {
+        validate(value: any, args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;
-          const relatedDate = (args.object as any)[relatedPropertyName];
+          let relatedValue = (args.object as any)[relatedPropertyName];
+
+          value = value instanceof Date ? value : new Date(value);
+
+          relatedValue =
+            relatedValue instanceof Date
+              ? relatedValue
+              : new Date(relatedValue);
 
           return (
-            date instanceof Date &&
-            relatedDate instanceof Date &&
-            date.getTime() - relatedDate.getTime() >= dateDiff * 1000
+            !isNaN(value.getTime()) &&
+            !isNaN(relatedValue.getTime()) &&
+            value.getTime() - relatedValue.getTime() >= dateDiff * 1000
           );
         },
       },
