@@ -19,11 +19,18 @@ export function IsDateAfter(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         validate(value: any, args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;
-          const relatedValue = (args.object as any)[relatedPropertyName];
+          let relatedValue = (args.object as any)[relatedPropertyName];
+
+          value = value instanceof Date ? value : new Date(value);
+
+          relatedValue =
+            relatedValue instanceof Date
+              ? relatedValue
+              : new Date(relatedValue);
 
           return (
-            value instanceof Date &&
-            relatedValue instanceof Date &&
+            !isNaN(value.getTime()) &&
+            !isNaN(relatedValue.getTime()) &&
             value.getTime() > relatedValue.getTime()
           );
         },
