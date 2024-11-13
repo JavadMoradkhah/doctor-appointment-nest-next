@@ -7,6 +7,6 @@ export const IsAdmin = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const user: ActiveUserData = request[REQUEST_USER_KEY];
-    return user.role === UserRole.ADMIN;
+    return !!user && user.role === UserRole.ADMIN;
   },
 );
