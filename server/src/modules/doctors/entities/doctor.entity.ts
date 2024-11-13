@@ -1,3 +1,4 @@
+import { Exclude, Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -10,14 +11,14 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { SerializerGroup } from '../../../common/enums/serializer-group.enum';
 import { Office } from '../../../modules/offices/entities/office.entity';
+import { Schedule } from '../../../modules/schedules/entities/schedule.entity';
 import { WorkingDay } from '../../../modules/working-days/entities/working-day.entity';
 import { Degree } from '../../degrees/entities/degree.entity';
 import { Service } from '../../services/entities/service.entity';
 import { Specialization } from '../../specializations/entities/specialization.entity';
 import { User } from '../../users/entities/user.entity';
-import { Exclude, Expose } from 'class-transformer';
-import { SerializerGroup } from 'src/common/enums/serializer-group.enum';
 
 @Entity('doctors')
 export class Doctor {
@@ -68,6 +69,9 @@ export class Doctor {
 
   @OneToMany(() => WorkingDay, (workingDay) => workingDay.doctor)
   workingDays: WorkingDay[];
+
+  @OneToMany(() => Schedule, (schedule) => schedule.doctor)
+  schedules: Schedule[];
 
   @OneToOne(() => Office, (office) => office.doctor)
   office: Office;
