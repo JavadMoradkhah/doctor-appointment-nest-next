@@ -29,6 +29,11 @@ export class User {
   @Column({ type: 'varchar', length: 50 })
   lastName: string;
 
+  @Expose()
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
   @Column({ type: 'varchar', length: 10, unique: true })
   @Expose({ groups: [SerializerGroup.ADMIN, SerializerGroup.OWNER] })
   nationCode: string;
